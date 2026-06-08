@@ -1,6 +1,8 @@
 <script>
 	import favicon from '$lib/assets/favicon.svg';
 
+	import "$lib/syles/reset.css";
+
 	let { children } = $props();
 </script>
 
