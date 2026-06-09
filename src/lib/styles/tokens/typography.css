@@ -1,3 +1,86 @@
 :root {
-    --font-primary: 'Satoshi', sans-serif;
+  /* Font Families */
+  --font-primary: 'Satoshi', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* Font Styles */
+  --font-style-normal: normal;
+  --font-style-italic: italic;
+
+  /* Font Sizes - Hero & Display */
+  --font-size-hero: 116px;
+  --font-size-display-lg: 48px;
+  --font-size-display-md: 40px;
+  --font-size-h1: 36px;
+  --font-size-h2: 32px;
+  --font-size-h3: 28px;
+  --font-size-h4: 24px;
+
+  /* Font Sizes - Body & UI */
+  --font-size-body-lg: 28px;
+  --font-size-body: 18px;
+  --font-size-body-sm: 16px;
+  --font-size-ui: 24px;
+  --font-size-ui-sm: 12px;
+  --font-size-caption: 10px;
+
+  /* Line Heights */
+  --line-height-tight: 1;
+  --line-height-normal: 1.15;
+  --line-height-relaxed: 1.5;
+  --line-height-loose: 1.75;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.5px;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.25px;
+  --letter-spacing-wider: 0.5px;
+
+  /* Text Styles - Typography Presets */
+  --text-hero: {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-hero);
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+  };
+
+  --text-display: {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-display-lg);
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-wide);
+  };
+
+  --text-heading: {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-wide);
+  };
+
+  --text-body: {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+  };
+
+  --text-button: {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-wide);
+  };
 }
