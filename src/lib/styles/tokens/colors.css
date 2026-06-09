@@ -1,0 +1,19 @@
+:root {
+  /* Background Colors */
+  --colors-background-primary: #233548;
+  --colors-background-secondary: #5982af;
+
+  /* Content Colors */
+  --colors-content-primary: #0870ed;
+  --colors-content-secondary: #dee6ef;
+
+  /* Neutral Colors */
+  --colors-neutral-white: #ffffff;
+  --colors-neutral-black: #000000;
+
+  /* Semantic Aliases (for usage compatibility) */
+  --colors-background-primary-rgb: 35, 53, 72;
+  --colors-content-primary-rgb: 8, 112, 237;
+  --colors-content-secondary-rgb: 222, 230, 239;
+  --colors-background-secondary-rgb: 89, 130, 175;
+}
