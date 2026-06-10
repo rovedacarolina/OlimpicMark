@@ -1,121 +1,72 @@
 <script>
-  let {
-    mainPercentage = 72,
-    leftPercentage = 64,
-    rightPercentage = 69,
-    backgroundImageUrl = ''
-  } = $props();
+	let { mainPercentage = 72, leftPercentage = 64, rightPercentage = 69 } = $props();
 </script>
 
-<div class="data-viz">
-  {#if backgroundImageUrl}
-    <img src={backgroundImageUrl} alt="Background" class="data-viz__background" />
-  {/if}
+<section class="data-viz">
+	<div class="side-value left">{leftPercentage}%</div>
 
-  <div class="data-viz__content">
-    <div class="data-viz__left">
-      <div class="data-viz__percentage left">
-        <span class="data-viz__value">{leftPercentage}</span>
-        <span class="data-viz__unit">%</span>
-      </div>
-    </div>
+	<div class="circle">
+		<div class="main-value">{mainPercentage}%</div>
+		<p>Lo considera uno dei casi più riusciti di legacy olimpica.</p>
+	</div>
 
-    <div class="data-viz__center">
-      <div class="data-viz__percentage main">
-        <span class="data-viz__value">{mainPercentage}</span>
-        <span class="data-viz__unit">%</span>
-      </div>
-    </div>
-
-    <div class="data-viz__right">
-      <div class="data-viz__percentage right">
-        <span class="data-viz__value">{rightPercentage}</span>
-        <span class="data-viz__unit">%</span>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="side-value right">{rightPercentage}%</div>
+</section>
 
 <style>
-  .data-viz {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 600px;
-  }
+	.data-viz {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 560px;
+	}
 
-  .data-viz__background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.3;
-    z-index: 0;
-  }
+	.circle {
+		width: min(560px, 70vw);
+		aspect-ratio: 1;
+		border-radius: var(--radius-round);
+		background: radial-gradient(circle at center, #0870ed 0%, #173b68 70%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
 
-  .data-viz__content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    padding: var(--spacing-8);
-    position: relative;
-    z-index: 1;
-  }
+	.main-value {
+		font-family: var(--font-primary);
+		font-size: clamp(120px, 14vw, 220px);
+		font-weight: var(--font-weight-black);
+		line-height: var(--line-height-tight);
+		color: var(--colors-content-secondary);
+		letter-spacing: -0.06em;
+	}
 
-  .data-viz__left,
-  .data-viz__right {
-    flex: 0 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	p {
+		max-width: 220px;
+		margin: var(--spacing-3) 0 0;
+		font-family: var(--font-primary);
+		font-size: var(--font-size-ui-sm);
+		line-height: var(--line-height-normal);
+		color: var(--colors-content-secondary);
+	}
 
-  .data-viz__center {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	.side-value {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		font-family: var(--font-primary);
+		font-size: var(--font-size-h1);
+		font-weight: var(--font-weight-black);
+		color: rgba(246, 246, 246, 0.5);
+	}
 
-  .data-viz__percentage {
-    display: flex;
-    align-items: baseline;
-    font-family: var(--font-primary);
-    font-weight: var(--font-weight-black);
-    font-style: italic;
-    letter-spacing: var(--letter-spacing-wide);
-    line-height: var(--line-height-tight);
-  }
+	.left {
+		left: 8%;
+	}
 
-  .data-viz__percentage.main {
-    font-size: 250px;
-    color: var(--colors-content-secondary);
-  }
-
-  .data-viz__percentage.left,
-  .data-viz__percentage.right {
-    font-size: 73px;
-    color: rgba(246, 246, 246, 0.48);
-    opacity: 0.7;
-  }
-
-  .data-viz__value {
-    font-size: inherit;
-    color: inherit;
-  }
-
-  .data-viz__unit {
-    font-size: 0.5em;
-    margin-left: 0.1em;
-    opacity: 0.8;
-    color: inherit;
-  }
-
-  .data-viz__percentage.main .data-viz__unit {
-    font-size: 0.55em;
-  }
+	.right {
+		right: 8%;
+	}
 </style>
