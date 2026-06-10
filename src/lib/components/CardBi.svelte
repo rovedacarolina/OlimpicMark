@@ -60,6 +60,7 @@
 			0 32px,
 			32px -32px,
 			-32px 0;
+        padding-bottom: var(--spacing-10);
 	}
 
 	.card-bi__image {

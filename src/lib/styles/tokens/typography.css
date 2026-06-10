@@ -15,20 +15,20 @@
 
   /* Font Sizes - Hero & Display */
   --font-size-hero: 116px;
-  --font-size-display-lg: 48px;
-  --font-size-display-md: 40px;
-  --font-size-h1: 36px;
-  --font-size-h2: 32px;
-  --font-size-h3: 28px;
-  --font-size-h4: 24px;
+  --font-size-display-lg: 80px;
+  --font-size-display-md: 80px;
+  --font-size-h1: 40px;
+  --font-size-h2: 36px;
+  --font-size-h3: 40px;
+  --font-size-h4: 28px;
 
   /* Font Sizes - Body & UI */
-  --font-size-body-lg: 28px;
-  --font-size-body: 18px;
-  --font-size-body-sm: 16px;
-  --font-size-ui: 24px;
-  --font-size-ui-sm: 12px;
-  --font-size-caption: 10px;
+  --font-size-body-lg: 36px;
+  --font-size-body: 32px;
+  --font-size-body-sm: 28px;
+  --font-size-ui: 36px;
+  --font-size-ui-sm: 24px;
+  --font-size-caption: 12px;
 
   /* Line Heights */
   --line-height-tight: 1;

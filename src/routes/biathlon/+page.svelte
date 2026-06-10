@@ -9,23 +9,35 @@
 	const accordionItems = [
 		{
 			label: 'Il Luogo',
-			content:
-				'Anterselva è uno dei comprensori di sci di fondo più prestigiosi del mondo, situato nel cuore delle Dolomiti. La vallata è caratterizzata da paesaggi alpini straordinari e una tradizione sportiva di eccellenza che risale a decenni.'
+			content: `L’Anterselva Biathlon Arena si trova in Val Anterselva, nel comune di Rasun-Anterselva, in Alto Adige, all’interno di un contesto alpino di grande valore paesaggistico vicino al Parco Naturale Vedrette di Ries-Aurina. Lo stadio è situato a circa 1.600 metri di altitudine ed è considerato uno dei luoghi più importanti al mondo per il biathlon.
+
+La struttura ospita gare internazionali sin dagli anni Settanta ed è diventata nel tempo una tappa fissa della Coppa del Mondo IBU. Nel 2020 ha inoltre ospitato i Campionati Mondiali di Biathlon, confermando il ruolo centrale di Anterselva nel panorama sportivo invernale internazionale.
+
+Per Milano-Cortina 2026 l’arena sarà sede di tutte le gare olimpiche di biathlon. A differenza di altri impianti costruiti appositamente per i Giochi, Anterselva rappresenta un esempio di infrastruttura già consolidata, che viene aggiornata e potenziata invece di essere realizzata ex novo.`
 		},
 		{
 			label: 'Cosa Resta Dopo',
-			content:
-				'Dopo le Olimpiadi, Anterselva rimane un centro internazionale di biathlon e sci di fondo, continuando ad ospitare competizioni mondiali. La struttura si trasforma in un impianto polivalente che serve la comunità locale e gli atleti professionisti.'
+			content: `Dopo Milano-Cortina 2026, l’Anterselva Biathlon Arena continuerà a essere utilizzata come uno dei principali centri mondiali del biathlon. La struttura manterrà il proprio calendario internazionale ospitando gare di Coppa del Mondo, eventi IBU, allenamenti federali e attività dedicate ai giovani atleti.
+
+La legacy dell’impianto non consiste nella creazione di una nuova funzione urbana, ma nel rafforzamento di una struttura sportiva già esistente e pienamente attiva. Gli investimenti olimpici consentiranno infatti di aumentare la competitività internazionale dell’arena per i prossimi decenni.
+
+L’impianto continuerà inoltre a rappresentare una risorsa fondamentale per il turismo sportivo dell’Alto Adige.`
 		},
 		{
 			label: 'Cosa sta Cambiando',
-			content:
-				"L'area sta subendo una trasformazione verso una maggiore sostenibilità ambientale. Sono in corso modernizzazioni infrastrutturali che includono migliori servizi di trasporto, strutture ricettive eco-compatibili e una migliore integrazione con il tessuto urbano locale."
+			content: `Gli interventi realizzati per Milano-Cortina 2026 hanno l’obiettivo di modernizzare l’impianto mantenendone però la struttura storica e il rapporto con il paesaggio alpino circostante.
+
+Il progetto prevede la costruzione di un nuovo edificio multifunzionale destinato ad atleti, media e servizi tecnici. La nuova struttura integra tecnologie energetiche sostenibili, tra cui una grande facciata fotovoltaica progettata per ridurre il consumo energetico complessivo dell’impianto.
+
+Sono stati inoltre rinnovati il poligono di tiro e parte delle piste gara, migliorando standard tecnici e sicurezza.`
 		},
 		{
 			label: 'Impatto sul Territorio',
-			content:
-				'La legacy olimpica genera occupazione stabile nel settore turistico e sportivo, attira investimenti internazionali e valorizza il patrimonio naturale e culturale della regione.'
+			content: `La riqualificazione dell’Anterselva Biathlon Arena rafforza il ruolo della Val Pusteria e dell’Alto Adige nel turismo sportivo internazionale.
+
+L’impatto principale riguarda la crescita della visibilità globale del territorio. Milano-Cortina 2026 porterà infatti milioni di spettatori televisivi a conoscere Anterselva, aumentando la promozione internazionale della valle come destinazione turistica alpina.
+
+Restano però alcune criticità. L’aumento del turismo durante i grandi eventi può generare pressione ambientale su un ecosistema alpino fragile.`
 		}
 	];
 
@@ -51,11 +63,17 @@
 			</p>
 		</section>
 
-		<DataVisualization mainPercentage={72} leftPercentage={64} rightPercentage={69} />
+		<section class="biathlon-page__data">
+			<DataVisualization />
+		</section>
 
-		<Accordion number="01" title="Stadio Biathlon, Anterselva" items={accordionItems} />
+		<section class="biathlon-page__accordion">
+			<Accordion number="01" title="Stadio Biathlon, Anterselva" items={accordionItems} />
+		</section>
 
-		<Verdetto bind:selected={selectedVerdetto} />
+		<section class="biathlon-page__verdetto">
+			<Verdetto bind:selected={selectedVerdetto} />
+		</section>
 	</main>
 </div>
 
@@ -68,38 +86,37 @@
 	.biathlon-page__content {
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-8);
 		padding-inline: var(--spacing-6);
 		padding-top: var(--spacing-6);
-		padding-bottom: var(--spacing-8);
+		padding-bottom: var(--spacing-10);
 	}
 
 	.biathlon-page__descriptive {
-		max-width: 360px;
+		max-width: 700px;
 		margin-left: auto;
+		padding-top: var(--spacing-10);
+        padding-bottom: var(--spacing-10);
 	}
 
 	.biathlon-page__descriptive p {
 		margin: 0;
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui-sm);
+		font-size: var(--font-size-h2);
 		line-height: var(--line-height-normal);
 		color: var(--colors-content-secondary);
 		text-align: right;
 	}
 
-	@media (max-width: 768px) {
-		.biathlon-page__content {
-			padding-inline: var(--spacing-4);
-		}
+	.biathlon-page__data {
+		padding-top: var(--spacing-10);
+        padding-bottom: var(--spacing-10);
+	}
 
-		.biathlon-page__descriptive {
-			max-width: 100%;
-			margin-left: 0;
-		}
+	.biathlon-page__accordion {
+		padding-top: var(--spacing-10);
+	}
 
-		.biathlon-page__descriptive p {
-			text-align: left;
-		}
+	.biathlon-page__verdetto {
+		padding-top: var(--spacing-10);
 	}
 </style>

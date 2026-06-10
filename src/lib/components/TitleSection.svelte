@@ -14,7 +14,8 @@
 
 <style>
 	.title-section {
-		padding-top: var(--unit-20);
+		padding-top: var(--spacing-10);
+        padding-bottom: var(--spacing-10);
 	}
 
 	h1 {
