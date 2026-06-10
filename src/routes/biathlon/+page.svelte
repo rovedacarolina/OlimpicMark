@@ -41,7 +41,7 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 		}
 	];
 
-	let selectedVerdetto = $state('POSITIVA');
+	
 </script>
 
 <svelte:head>
@@ -54,7 +54,12 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 	<main class="biathlon-page__content">
 		<TitleSection title="STADIO BIATHLON" subtitle="ANTERSELVA, BOLZANO" />
 
-		<CardBi beforeLabel="BEFORE" afterLabel="AFTER" />
+	<CardBi
+        beforeImage="/images/biathlon-before.jpg"
+        afterImage="/images/biathlon-after.jpg"
+        beforeLabel="BEFORE"
+        afterLabel="AFTER"
+    />
 
 		<section class="biathlon-page__descriptive">
 			<p>
@@ -72,7 +77,7 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 		</section>
 
 		<section class="biathlon-page__verdetto">
-			<Verdetto bind:selected={selectedVerdetto} />
+			<Verdetto verdict="POSITIVA" />
 		</section>
 	</main>
 </div>
