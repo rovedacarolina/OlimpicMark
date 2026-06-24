@@ -142,7 +142,7 @@
 		margin: 0 0 var(--spacing-4);
 
 		font-family: var(--font-primary);
-		font-size: var(--font-size-h3);
+		font-size: var(--font-size-h1);
 		font-weight: var(--font-weight-regular);
 		line-height: var(--line-height-normal);
 		letter-spacing: var(--letter-spacing-normal);
