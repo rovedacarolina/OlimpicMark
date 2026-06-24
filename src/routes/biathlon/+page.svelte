@@ -61,12 +61,13 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
         afterLabel="AFTER"
     />
 
-		<section class="biathlon-page__descriptive">
-			<p>
-				Ad Anterselva la legacy appare concreta, perché sport, mobilità e continuità d'uso
-				vengono percepiti come elementi già integrati nel territorio.
-			</p>
-		</section>
+		<section class="intro-text">
+	<p>
+		AD ANTERSELVA LA LEGACY APPARE CONCRETA, PERCHÉ SPORT,
+		MOBILITÀ E CONTINUITÀ D'USO VENGONO PERCEPITI COME
+		ELEMENTI GIÀ INTEGRATI NEL TERRITORIO.
+	</p>
+</section>
 
 		<section class="biathlon-page__data">
 			<DataVisualization />
@@ -96,21 +97,29 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 		padding-bottom: var(--spacing-10);
 	}
 
-	.biathlon-page__descriptive {
-		max-width: 700px;
-		margin-left: auto;
-		padding-top: var(--spacing-10);
-        padding-bottom: var(--spacing-10);
-	}
+.intro-text {
+	display: flex;
+	justify-content: center;
+	padding-inline: var(--spacing-6);
+	padding-block: var(--spacing-10);
+}
 
-	.biathlon-page__descriptive p {
-		margin: 0;
-		font-family: var(--font-primary);
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-normal);
-		color: var(--colors-content-secondary);
-		text-align: right;
-	}
+.intro-text p {
+	width: min(85%, 1400px);
+
+	margin: 0;
+
+	text-align: center;
+	text-transform: uppercase;
+
+	font-family: var(--font-primary);
+	font-size: 64px;
+	font-weight: var(--font-weight-regular);
+	line-height: 1.35;
+	letter-spacing: 0.08em;
+
+	color: var(--colors-content-secondary);
+}
 
 	.biathlon-page__data {
 		padding-top: var(--spacing-10);

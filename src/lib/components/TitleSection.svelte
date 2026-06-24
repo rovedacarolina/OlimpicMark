@@ -14,14 +14,14 @@
 
 <style>
 	.title-section {
-		padding-top: var(--spacing-10);
-        padding-bottom: var(--spacing-10);
+		padding-top: var(--spacing-8);
+		padding-bottom: var(--spacing-8);
 	}
 
 	h1 {
 		margin: 0;
 		font-family: var(--font-primary);
-		font-size: var(--font-size-display-lg);
+		font-size: var(--font-size-hero);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -30,13 +30,23 @@
 	}
 
 	p {
-		margin: 0;
-		margin-top: var(--spacing-1);
+		margin: var(--spacing-4) 0 0;
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui);
+		font-size: var(--font-size-display-lg);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
+		letter-spacing: var(--letter-spacing-wide);
 		text-transform: uppercase;
-		color: var(--colors-content-primary);
+		color: var(--colors-content-secondary);
+	}
+
+	@media (max-width: 768px) {
+		h1 {
+			font-size: var(--font-size-display-lg);
+		}
+
+		p {
+			font-size: var(--font-size-h2);
+		}
 	}
 </style>

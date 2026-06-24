@@ -9,21 +9,18 @@
 </script>
 
 <section class="accordion">
-	<header class="accordion__header">
-		<span class="accordion__number">{number}</span>
-		<span class="accordion__title">{title}</span>
-	</header>
-
 	<div class="accordion__list">
 		{#each items as item, index}
-			<div class="accordion__row">
-				<button
-					class="accordion__trigger"
-					class:is-open={expandedIndex === index}
-					onclick={() => toggleItem(index)}
-				>
+			<div class="accordion__row" class:is-open={expandedIndex === index}>
+				<button class="accordion__trigger" onclick={() => toggleItem(index)}>
 					<span>{item.label}</span>
-					<span class="accordion__icon">{expandedIndex === index ? '−' : '+'}</span>
+					<span class="accordion__icon">
+	{#if expandedIndex === index}
+		<i class="fi fi-sr-square-minus"></i>
+	{:else}
+		<i class="fi fi-sr-square-plus"></i>
+	{/if}
+</span>
 				</button>
 
 				{#if expandedIndex === index}
@@ -41,95 +38,115 @@
 <style>
 	.accordion {
 		width: 100%;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: var(--spacing-10);
-		font-family: var(--font-primary);
-	}
+		min-height: 100vh;
 
-	.accordion__header {
-		display: contents;
-	}
+		display: flex;
+		align-items: center;
 
-	.accordion__number {
-		grid-column: 1;
-		justify-self: start;
-		color: var(--colors-content-primary);
-		font-size: var(--font-size-h3);
-		font-weight: var(--font-weight-black);
-		line-height: var(--line-height-tight);
-        padding-bottom: var(--spacing-4);
-	}
-
-	.accordion__title {
-		grid-column: 2;
-		justify-self: start;
-		color: var(--colors-content-primary);
-		font-size: var(--font-size-h3);
-		font-weight: var(--font-weight-black);
-		line-height: var(--line-height-tight);
-        padding-bottom: var(--spacing-4);
+		padding-block: var(--spacing-10);
+		font-family: var(--font-secondary);
 	}
 
 	.accordion__list {
-		grid-column: 2;
-		margin-top: var(--spacing-8);
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-6);
+		gap: var(--spacing-7);
+	}
+
+	.accordion__row {
+		width: 100%;
 	}
 
 	.accordion__trigger {
 		width: 100%;
+
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--spacing-6);
+
 		padding: 0;
 		border: 0;
 		background: transparent;
 		cursor: pointer;
-		text-align: left;
-		font-family: var(--font-primary);
-		font-size: var(--font-size-h4);
+
+		font-family: var(--font-secondary);
+		font-size: var(--font-size-hero);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
-		color: rgba(var(--colors-content-secondary-rgb), 0.72);
+		letter-spacing: var(--letter-spacing-wide);
+		text-transform: uppercase;
+		text-align: left;
+
+		color: var(--colors-content-secondary);
 	}
 
-	.accordion__trigger:hover,
-	.accordion__trigger.is-open {
-		color: var(--colors-content-primary);
+	.accordion__trigger {
+	color: var(--colors-content-secondary);
+	transition: color 0.25s ease;
+}
+
+.accordion__trigger {
+	color: var(--colors-content-secondary);
+	transition: color 0.25s ease;
+}
+
+.accordion__icon i {
+	color: var(--colors-content-secondary);
+	transition: color 0.25s ease;
+}
+
+	.accordion__row.is-open .accordion__trigger {
+		margin-bottom: var(--spacing-6);
 	}
 
 	.accordion__icon {
-		width: 24px;
-		height: 24px;
-		border: 2px solid currentColor;
+		width: 76px;
+		height: 76px;
+
+
 		border-radius: var(--radius-round);
+
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		font-size: var(--font-size-ui-sm);
-		font-weight: var(--font-weight-medium);
+
+		font-size: var(--font-size-display-lg);
+		font-weight: var(--font-weight-black);
 		line-height: 1;
+
+		color: var(--colors-content-secondary);
 		flex-shrink: 0;
 	}
 
+	.accordion__icon,
+.accordion__icon i {
+	color: inherit;
+	transition: color 0.25s ease;
+}
+
+.accordion__trigger:hover {
+	color: var(--colors-content-primary);
+}
+
+.accordion__trigger:hover .accordion__icon i {
+	color: var(--colors-content-primary);
+}
 	.accordion__content {
-		max-width: 650px;
-		margin-top: var(--spacing-3);
-		color: var(--colors-content-primary);
+		width: min(900px, 82vw);
+		padding-left: var(--spacing-4);
 	}
 
 	.accordion__content p {
-		margin: 0 0 var(--spacing-3);
+		margin: 0 0 var(--spacing-4);
+
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui-sm);
-		font-weight: var(--font-weight-medium);
+		font-size: var(--font-size-h3);
+		font-weight: var(--font-weight-regular);
 		line-height: var(--line-height-normal);
 		letter-spacing: var(--letter-spacing-normal);
+
 		color: var(--colors-content-primary);
 	}
 
@@ -139,18 +156,32 @@
 
 	@media (max-width: 768px) {
 		.accordion {
-			grid-template-columns: 1fr;
-			row-gap: var(--spacing-4);
-		}
-
-		.accordion__number,
-		.accordion__title,
-		.accordion__list {
-			grid-column: 1;
+			min-height: auto;
+			padding-block: var(--spacing-8);
 		}
 
 		.accordion__list {
-			margin-top: var(--spacing-4);
+			gap: var(--spacing-6);
+		}
+
+		.accordion__trigger {
+			font-size: var(--font-size-display-lg);
+		}
+
+		.accordion__icon {
+			width: 48px;
+			height: 48px;
+			border-width: 5px;
+			font-size: var(--font-size-h3);
+		}
+
+		.accordion__content {
+			width: 100%;
+			padding-left: 0;
+		}
+
+		.accordion__content p {
+			font-size: var(--font-size-body);
 		}
 	}
 </style>

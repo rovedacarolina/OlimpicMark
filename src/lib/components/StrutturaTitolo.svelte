@@ -1,19 +1,47 @@
 <script>
 	let hovered = $state(false);
+	let typedCity = $state('');
+	let interval;
 
 	let { title = '', city = '', href = '' } = $props();
 
-	let displayTitle = $derived(hovered && city ? `${city} / ${title}` : title);
+	function startTyping() {
+		hovered = true;
+		typedCity = '';
+		clearInterval(interval);
+
+		let index = 0;
+
+		interval = setInterval(() => {
+			typedCity = city.slice(0, index + 1);
+			index++;
+
+			if (index >= city.length) {
+				clearInterval(interval);
+			}
+		}, 45);
+	}
+
+	function stopTyping() {
+		hovered = false;
+		typedCity = '';
+		clearInterval(interval);
+	}
 </script>
 
 <a
 	href={href}
 	class="struttura-titolo"
-	onmouseenter={() => (hovered = true)}
-	onmouseleave={() => (hovered = false)}
+	onmouseenter={startTyping}
+	onmouseleave={stopTyping}
 >
-	<h2 class="struttura-titolo__text" class:is-hovered={hovered}>
-		{displayTitle}
+	<h2 class="struttura-titolo__text">
+		{#if hovered}
+			<span class="struttura-titolo__city">{typedCity}</span>
+			<span class="struttura-titolo__separator"> / </span>
+		{/if}
+
+		<span class="struttura-titolo__title">{title}</span>
 	</h2>
 </a>
 
@@ -26,25 +54,28 @@
 	}
 
 	.struttura-titolo__text {
-	margin: 0;
-	font-family: var(--font-primary);
-	font-size: var(--font-size-hero);
-	font-weight: var(--font-weight-black);
-	line-height: var(--line-height-tight);
-	letter-spacing: var(--letter-spacing-wide);
-	text-transform: uppercase;
-	color: var(--colors-content-primary);
-	white-space: nowrap;
-	transition: color 0.2s ease;
-}
+		margin: 0;
+		font-family: var(--font-primary);
+		font-size: var(--font-size-hero);
+		font-weight: var(--font-weight-black);
+		line-height: var(--line-height-tight);
+		letter-spacing: var(--letter-spacing-wide);
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
 
-	.struttura-titolo__text.is-hovered {
-		color: white;
+	.struttura-titolo__city,
+	.struttura-titolo__separator {
+		color: var(--colors-content-secondary);
+	}
+
+	.struttura-titolo__title {
+		color: var(--colors-content-primary);
 	}
 
 	@media (max-width: 768px) {
 		.struttura-titolo__text {
-			font-size: clamp(2.3rem, 10vw, 4rem);
+			font-size: var(--font-size-display-lg);
 			white-space: normal;
 		}
 	}
