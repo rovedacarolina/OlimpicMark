@@ -1,6 +1,7 @@
 <script>
 	import TopBar from '$lib/components/TopBar.svelte';
 	import StrutturaTitolo from '$lib/components/StrutturaTitolo.svelte';
+	import BackgroundPattern from '$lib/components/BackgroundPattern.svelte';
 
 	const strutture = [
 		{ title: 'STADIO BIATHLON', city: 'ANTERSELVA', href: '/biathlon' },
@@ -18,6 +19,7 @@
 </svelte:head>
 
 <div class="home-page">
+	<BackgroundPattern text="OLYMPIC MARK" />
 	<TopBar />
 
 	<main class="home-page__content">
@@ -49,6 +51,14 @@
 	padding-inline: var(--spacing-6);
 	padding-top: var(--spacing-6);
 	padding-bottom: var(--spacing-7);
+
+	position: relative;
+	z-index: 1;
+}
+
+:global(.top-bar) {
+	position: relative;
+	z-index: 1;
 }
 
 	@media (max-width: 768px) {
