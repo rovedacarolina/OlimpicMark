@@ -29,11 +29,11 @@
 
 <style>
 	.switcher {
-		--switcher-width: 116px;
-		--switcher-height: 56px;
-		--switcher-padding: 3px;
-		--switcher-thumb: calc(var(--switcher-height) - (var(--switcher-padding) * 2));
-		--switcher-step: calc(var(--switcher-width) - var(--switcher-thumb) - (var(--switcher-padding) * 2));
+		--switcher-width: 104px;
+		--switcher-height: 48px;
+		--switcher-padding: 4px;
+		--switcher-cell: calc((var(--switcher-width) - (var(--switcher-padding) * 2)) / 2);
+		--switcher-thumb: 40px;
 
 		position: relative;
 		width: var(--switcher-width);
@@ -53,10 +53,10 @@
 	.switcher__indicator {
 		position: absolute;
 		top: var(--switcher-padding);
-		left: var(--switcher-padding);
+		left: calc(var(--switcher-padding) + ((var(--switcher-cell) - var(--switcher-thumb)) / 2));
 
-		width: 46px;
-		height: 46px;
+		width: var(--switcher-thumb);
+		height: var(--switcher-thumb);
 
 		border-radius: var(--radius-round);
 		background: var(--colors-content-primary);
@@ -66,14 +66,14 @@
 	}
 
 	.switcher__indicator.is-list {
-		transform: translateX(var(--switcher-step));
+		transform: translateX(var(--switcher-cell));
 	}
 
 	.switcher__button {
 		position: relative;
 		z-index: 2;
 
-		width: var(--switcher-thumb);
+		width: var(--switcher-cell);
 		height: var(--switcher-thumb);
 
 		display: flex;
@@ -85,13 +85,26 @@
 	}
 
 	.switcher__button svg {
-		width: 17px;
-		height: 17px;
+		width: 18px;
+		height: 18px;
 
 		fill: none;
 		stroke: currentColor;
 		stroke-width: 2.2;
 		stroke-linecap: round;
 		stroke-linejoin: round;
+	}
+
+	@media (max-width: 768px) {
+		.switcher {
+			--switcher-width: 92px;
+			--switcher-height: 42px;
+			--switcher-thumb: 34px;
+		}
+
+		.switcher__button svg {
+			width: 16px;
+			height: 16px;
+		}
 	}
 </style>

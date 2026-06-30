@@ -1,6 +1,7 @@
 <script>
 	let hovered = $state(false);
 	let typedCity = $state('');
+	/** @type {ReturnType<typeof setInterval> | undefined} */
 	let interval;
 
 	let { title = '', city = '', href = '' } = $props();

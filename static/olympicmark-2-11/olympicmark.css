@@ -1,0 +1,506 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: #080810;
+}
+
+body {
+  font-family: 'Satoshi', sans-serif;
+  background: #080810;
+  width: 100vw;
+  min-height: 650vh;
+  overflow-x: hidden;
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────────
+   UNA SOLA MAPPA
+   È fissa sotto tutto: all'inizio sembra sfondo,
+   dopo lo scroll diventa la mappa interattiva.
+───────────────────────────────────────────── */
+#map {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  opacity: 1;
+}
+
+body:not(.map-active) #map {
+  pointer-events: none;
+}
+
+body.map-active #map {
+  pointer-events: auto;
+}
+
+/* Overlay gradiente della landing: riprende il tuo index originale */
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #080810 0%,
+    #080810 30%,
+    rgba(8,8,16,.98) 40%,
+    rgba(8,8,16,.90) 50%,
+    rgba(8,8,16,.75) 60%,
+    rgba(8,8,16,.45) 70%,
+    rgba(8,8,16,.15) 85%,
+    transparent 100%
+  );
+}
+
+/* Overlay della mappa originale: compare solo nella vista mappa */
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.65) 0%,
+    rgba(0,0,0,0.05) 40%,
+    rgba(0,0,0,0.05) 60%,
+    rgba(0,0,0,0.65) 100%
+  );
+  z-index: 2;
+  opacity: 0;
+}
+
+/* ── TOPBAR: posizione originale prima pagina ── */
+.topbar {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.nav-switch {
+  display: flex;
+  background: rgba(15,15,15,0.88);
+  padding: 6px;
+  border-radius: 999px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  gap: 4px;
+}
+
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s, color 0.25s;
+}
+
+.nav-btn.active {
+  background: #0870ED;
+  color: #fff;
+}
+
+.nav-btn:not(.active):hover {
+  color: rgba(255,255,255,0.8);
+}
+
+/* ── HERO CONTENT: IDENTICO AL TUO INDEX ORIGINALE ── */
+.hero-content {
+  position: fixed;
+  top: 50%;
+  left: 8vw;
+  transform: translateY(-50%);
+  z-index: 10;
+  max-width: 500px;
+  animation: fadeUp 0.9s ease both;
+  pointer-events: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(calc(-50% + 24px)); }
+  to   { opacity: 1; transform: translateY(-50%); }
+}
+
+.hero-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #0870ED;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -4px;
+  line-height: 0.92;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  transform-origin: top left;
+  will-change: transform, color, letter-spacing;
+  /* Riabilita gli eventi del mouse solo sul titolo, per l'effetto hover,
+     anche se il contenitore .hero-content ha pointer-events: none */
+  pointer-events: auto;
+  display: inline-block;
+  cursor: default;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.5);
+  font-weight: 400;
+  margin-bottom: 40px;
+}
+
+.scroll-hint {
+  margin-top: 4px;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.scroll-hint span {
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  margin-left: 12px;
+  background: rgba(255,255,255,0.35);
+  vertical-align: middle;
+}
+
+/* Spazio che permette lo scroll senza creare una seconda mappa.
+   Questo resta come prima: landing → vista generale della mappa. */
+.scroll-space {
+  position: relative;
+  z-index: -1;
+  height: 220vh;
+  pointer-events: none;
+}
+
+/* Spazio aggiunto solo dopo la mappa generale: Milano → Cortina → Anterselva. */
+.focus-space {
+  position: relative;
+  z-index: -1;
+  height: 360vh;
+  pointer-events: none;
+}
+
+/* ── CONTROLLI MAPPA: uguali al secondo file, nascosti in landing ── */
+.map-controls {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.map-active .map-controls {
+  pointer-events: auto;
+}
+
+.map-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(15,15,15,0.88);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.map-ctrl-btn:hover:not(:disabled) {
+  background: #0870ED;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.map-ctrl-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.map-ctrl-btn.active-photo {
+  background: #0870ED;
+  color: #fff;
+}
+
+#zoomInBtn {
+  margin-top: 8px;
+}
+
+/* ── MARKER STILE REFERENCE: nascosti da lontano, visibili solo nel focus ── */
+.site-marker {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(4px) scale(0.92);
+  transition:
+    opacity 0.24s ease,
+    visibility 0.24s ease,
+    transform 0.24s ease;
+}
+
+body.markers-enabled .site-marker.marker-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) scale(1);
+}
+
+.marker-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50% 50% 50% 0;
+  background: rgba(245,245,245,0.96);
+  transform: translate(-50%, -50%) rotate(-45deg);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.48),
+    0 0 0 5px rgba(255,255,255,0.13);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.marker-dot::before {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #0870ED;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.site-marker.marker-hovered .marker-dot,
+.marker-dot:hover,
+.marker-dot:focus-visible {
+  background: #0870ED;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.56),
+    0 0 0 8px rgba(8,112,237,0.34);
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.12);
+  outline: none;
+}
+
+/* La preview non è più dentro ogni marker: una sola card flottante viene spostata via JS. */
+.marker-preview {
+  display: none !important;
+}
+
+.site-marker.marker-hovered .marker-dot::before,
+.marker-dot:hover::before,
+.marker-dot:focus-visible::before {
+  background: rgba(255,255,255,0.95);
+}
+
+.place-preview {
+  position: fixed;
+  width: 190px;
+  aspect-ratio: 16 / 9;
+  z-index: 19;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: #020204;
+  overflow: hidden;
+  box-shadow: 0 18px 46px rgba(0,0,0,0.58);
+  transform: translateY(10px) scale(0.96);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s ease;
+}
+
+.place-preview.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.place-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.place-title {
+  position: fixed;
+  left: 32px;
+  bottom: 48px;
+  z-index: 18;
+  max-width: 82vw;
+  color: #fff;
+  font-size: clamp(2.6rem, 5.4vw, 5.6rem);
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  text-shadow: 0 20px 60px rgba(0,0,0,0.65);
+}
+
+body.focus-region-active .place-title.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── MODAL FOTO ── */
+.photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.photo-modal.open { display: flex; }
+
+.photo-modal img {
+  max-width: 80vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+
+.photo-caption {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.photo-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.photo-close:hover { background: rgba(255,255,255,0.2); }
+
+/* ── MAPBOX POPUP ── */
+.mapboxgl-popup-content {
+  background: rgba(10,10,10,0.92) !important;
+  border: 1px solid rgba(8,112,237,0.4) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  color: #fff !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.mapboxgl-popup-content h3 {
+  color: #0870ED;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0 0 2px;
+}
+
+.mapboxgl-popup-content p {
+  color: rgba(255,255,255,0.65);
+  font-size: 11px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: rgba(8,112,237,0.4) !important;
+  border-bottom-color: rgba(8,112,237,0.4) !important;
+}
+
+.mapboxgl-ctrl-attrib {
+  background: rgba(0,0,0,0.5) !important;
+  color: rgba(255,255,255,0.4) !important;
+  font-size: 10px !important;
+}
+
+.mapboxgl-ctrl-attrib a { color: rgba(255,255,255,0.4) !important; }
+
+.mapboxgl-marker {
+  will-change: transform;
+  pointer-events: auto !important;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    left: 7vw;
+    max-width: 86vw;
+  }
+
+  .hero-title {
+    font-size: clamp(3.2rem, 16vw, 5.4rem);
+    letter-spacing: -3px;
+  }
+
+  .topbar {
+    top: 18px;
+  }
+
+}

@@ -18,8 +18,9 @@
 
 		width: 100%;
 
-		padding-top: var(--unit-20);
+		padding-top: var(--spacing-5);
 		padding-inline: var(--spacing-6);
+		gap: var(--spacing-4);
 
 		background: var(--colors-background-primary);
 	}
@@ -35,17 +36,30 @@
 	.top-bar__brand,
 	.top-bar__link {
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui);
+		font-size: var(--font-size-ui-sm);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
-		letter-spacing: var(--letter-spacing-wide);
+		letter-spacing: 0;
 		text-transform: uppercase;
 		color: var(--colors-content-secondary);
 		text-decoration: none;
+		white-space: nowrap;
 	}
 
 	.top-bar__brand:hover,
 	.top-bar__link:hover {
 		color: var(--colors-content-primary);
+	}
+
+	@media (max-width: 768px) {
+		.top-bar {
+			padding-inline: 20px;
+			gap: var(--spacing-3);
+		}
+
+		.top-bar__brand,
+		.top-bar__link {
+			font-size: 16px;
+		}
 	}
 </style>

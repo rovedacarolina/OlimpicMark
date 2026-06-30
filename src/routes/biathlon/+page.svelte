@@ -5,7 +5,6 @@
 	import Accordion from '$lib/components/Accordion.svelte';
 	import Verdetto from '$lib/components/Verdetto.svelte';
 	import DataVisualization from '$lib/components/DataVisualization.svelte';
-	import BackgroundPattern from '$lib/components/BackgroundPattern.svelte';
 
 	const accordionItems = [
 		{
@@ -50,19 +49,18 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 </svelte:head>
 
 <div class="biathlon-page">
-
-	<BackgroundPattern text="ANTERSELVA" />
-
 	<TopBar />
 
 	<main class="biathlon-page__content">
 		<TitleSection title="STADIO BIATHLON" subtitle="ANTERSELVA, BOLZANO" />
 
 	<CardBi
-        beforeImage="/images/biathlon-before.jpg"
-        afterImage="/images/biathlon-after.jpg"
+        beforeImage="/images/biathlonbefore.jpg"
+        afterImage="/images/biathlonafter.jpg"
         beforeLabel="BEFORE"
         afterLabel="AFTER"
+        beforeAlt="Area dello stadio del biathlon prima degli interventi"
+        afterAlt="Stadio del biathlon dopo gli interventi"
     />
 
 		<section class="intro-text">
@@ -137,33 +135,6 @@ Restano però alcune criticità. L’aumento del turismo durante i grandi eventi
 	.biathlon-page__verdetto {
 		padding-top: var(--spacing-10);
 	}
-
-	.page-watermark {
-	position: fixed;
-
-	top: 50%;
-	left: 50%;
-
-	transform: translate(-50%, -50%);
-
-	font-family: var(--font-primary);
-
-	font-size: 24vw;
-
-	font-weight: var(--font-weight-black);
-
-	line-height: 1;
-
-	letter-spacing: -0.08em;
-
-	color: rgba(var(--colors-content-secondary-rgb), 0.025);
-
-	white-space: nowrap;
-
-	pointer-events: none;
-
-	z-index: 0;
-}
 
 .biathlon-page__content {
 	position: relative;

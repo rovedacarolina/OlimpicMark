@@ -1,151 +1,126 @@
 <script>
+	import { onMount } from 'svelte';
+	import ImageCompare from 'image-compare-viewer';
+	import 'image-compare-viewer/dist/image-compare-viewer.min.css';
+
 	let {
 		beforeImage = '',
 		afterImage = '',
 		beforeLabel = 'BEFORE',
-		afterLabel = 'AFTER'
+		afterLabel = 'AFTER',
+		beforeAlt = 'Immagine prima dell’intervento',
+		afterAlt = 'Immagine dopo l’intervento'
 	} = $props();
 
-	let position = $state(50);
+	/** @type {HTMLDivElement | undefined} */
+	let compareElement;
+
+	onMount(() => {
+		if (!compareElement || !beforeImage || !afterImage) return;
+
+		const viewer = new ImageCompare(compareElement, {
+			controlColor: '#DEE6EF',
+			controlShadow: true,
+			addCircle: true,
+			addCircleBlur: true,
+			showLabels: true,
+			labelOptions: {
+				before: beforeLabel,
+				after: afterLabel,
+				onHover: false
+			},
+			smoothing: true,
+			smoothingAmount: 140,
+			startingPoint: 75,
+			fluidMode: true
+		});
+
+		viewer.mount();
+	});
 </script>
 
-<div class="card-bi" style={`--position: ${position}%`}>
-	<div class="card-bi__image card-bi__before">
+<section class="card-bi" aria-label="Confronto fotografico prima e dopo">
+	<div class="card-bi__compare" bind:this={compareElement}>
 		{#if beforeImage}
-			<img src={beforeImage} alt="Before" />
+			<img src={beforeImage} alt={beforeAlt} />
 		{/if}
-	</div>
 
-	<div class="card-bi__image card-bi__after">
 		{#if afterImage}
-			<img src={afterImage} alt="After" />
+			<img src={afterImage} alt={afterAlt} />
 		{/if}
 	</div>
-
-	<span class="card-bi__label card-bi__label--before">{beforeLabel}</span>
-	<span class="card-bi__label card-bi__label--after">{afterLabel}</span>
-
-	<div class="card-bi__divider"></div>
-
-	<div class="card-bi__handle">
-		<span>‹</span>
-		<span>›</span>
-	</div>
-
-	<input
-		class="card-bi__range"
-		type="range"
-		min="0"
-		max="100"
-		bind:value={position}
-		aria-label="Before after slider"
-	/>
-</div>
+</section>
 
 <style>
 	.card-bi {
+		width: 100%;
+		background: rgba(var(--colors-neutral-black-rgb), 0.18);
+		overflow: hidden;
+	}
+
+	.card-bi__compare {
 		position: relative;
 		width: 100%;
-		aspect-ratio: 1432 / 904;
+		aspect-ratio: 4 / 3;
 		overflow: hidden;
-		background:
-			linear-gradient(45deg, #e8e8e8 25%, transparent 25%),
-			linear-gradient(-45deg, #e8e8e8 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #e8e8e8 75%),
-			linear-gradient(-45deg, transparent 75%, #e8e8e8 75%);
-		background-color: #f6f6f6;
-		background-size: 64px 64px;
-		background-position:
-			0 0,
-			0 32px,
-			32px -32px,
-			-32px 0;
-        padding-bottom: var(--spacing-10);
+		background: rgba(var(--colors-neutral-black-rgb), 0.2);
 	}
 
-	.card-bi__image {
-		position: absolute;
-		inset: 0;
-	}
-
-	.card-bi__image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+	.card-bi__compare img {
 		display: block;
+		width: 100%;
+		height: auto;
 	}
 
-	.card-bi__before {
-		background: #f6f6f6;
+	:global(.card-bi__compare.icv) {
+		cursor: ew-resize;
 	}
 
-	.card-bi__after {
-		width: var(--position);
-		overflow: hidden;
-		background: rgba(8, 112, 237, 0.12);
-	}
-
-	.card-bi__label {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		z-index: 4;
+	:global(.card-bi__compare .icv__label) {
+		bottom: auto;
+		top: var(--spacing-6);
+		border-radius: 0;
+		padding: 10px 14px;
+		background: rgba(var(--colors-background-primary-rgb), 0.78);
+		color: var(--colors-content-secondary);
 		font-family: var(--font-primary);
 		font-size: var(--font-size-ui-sm);
 		font-weight: var(--font-weight-black);
-		color: var(--colors-content-primary);
+		line-height: var(--line-height-tight);
+		letter-spacing: 0;
 		text-transform: uppercase;
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
 	}
 
-	.card-bi__label--before {
+	:global(.card-bi__compare .icv__label-before) {
 		left: var(--spacing-6);
 	}
 
-	.card-bi__label--after {
+	:global(.card-bi__compare .icv__label-after) {
 		right: var(--spacing-6);
 	}
 
-	.card-bi__divider {
-		position: absolute;
-		top: 0;
-		left: var(--position);
+	:global(.card-bi__compare .icv__circle) {
+		background: rgba(var(--colors-background-primary-rgb), 0.62);
+	}
+
+	:global(.card-bi__compare .icv__control-line) {
 		width: 2px;
-		height: 100%;
-		background: var(--colors-content-primary);
-		transform: translateX(-50%);
-		z-index: 5;
-		pointer-events: none;
 	}
 
-	.card-bi__handle {
-		position: absolute;
-		left: var(--position);
-		top: 50%;
-		width: 48px;
-		height: 48px;
-		transform: translate(-50%, -50%);
-		border-radius: var(--radius-round);
-		border: 2px solid var(--colors-content-primary);
-		background: rgba(246, 246, 246, 0.2);
-		color: var(--colors-content-primary);
-		z-index: 6;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 2px;
-		font-family: var(--font-primary);
-		font-size: 24px;
-		font-weight: var(--font-weight-black);
-		pointer-events: none;
-	}
+	@media (max-width: 768px) {
+		:global(.card-bi__compare .icv__label) {
+			top: var(--spacing-4);
+			font-size: 18px;
+		}
 
-	.card-bi__range {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		opacity: 0;
-		cursor: ew-resize;
-		z-index: 10;
+		:global(.card-bi__compare .icv__label-before) {
+			left: var(--spacing-4);
+		}
+
+		:global(.card-bi__compare .icv__label-after) {
+			right: var(--spacing-4);
+		}
 	}
 </style>

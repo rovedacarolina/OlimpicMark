@@ -1,8 +1,11 @@
 <script>
-	let { value = 'VERDETTO POSITIVO' } = $props();
+	/** @type {{ value?: string, verdict?: string }} */
+	let { value = '', verdict = 'VERDETTO POSITIVO' } = $props();
+	let verdictText = $derived(value || verdict);
 
 	let hasStarted = $state(false);
 	let displayedText = $state('');
+	/** @type {ReturnType<typeof setInterval> | undefined} */
 	let interval;
 
 	function revealVerdict() {
@@ -14,10 +17,10 @@
 		let index = 0;
 
 		interval = setInterval(() => {
-			displayedText = value.slice(0, index + 1);
+			displayedText = verdictText.slice(0, index + 1);
 			index++;
 
-			if (index >= value.length) {
+			if (index >= verdictText.length) {
 				clearInterval(interval);
 			}
 		}, 70);

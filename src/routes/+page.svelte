@@ -1,17 +1,7 @@
 <script>
 	import TopBar from '$lib/components/TopBar.svelte';
 	import StrutturaTitolo from '$lib/components/StrutturaTitolo.svelte';
-	import BackgroundPattern from '$lib/components/BackgroundPattern.svelte';
-
-	const strutture = [
-		{ title: 'STADIO BIATHLON', city: 'ANTERSELVA', href: '/biathlon' },
-		{ title: 'PISTA DA BOB', city: 'CORTINA', href: '/bob' },
-		{ title: 'BACINO DI INNEVAMENTO', city: 'LIVIGNO', href: '/innevamento' },
-		{ title: 'NUOVA CABINOVIA', city: 'BORMIO', href: '/cabinovia' },
-		{ title: 'VILLAGGIO OLIMPICO', city: 'MILANO', href: '/villaggio' },
-		{ title: 'ARENA SANTA GIULIA', city: 'MILANO', href: '/arena' },
-		{ title: 'PALAHOCKEY RHO FIERA', city: 'RHO', href: '/palahockey' }
-	];
+	import { structures } from '$lib/data/structures.js';
 </script>
 
 <svelte:head>
@@ -19,11 +9,10 @@
 </svelte:head>
 
 <div class="home-page">
-	<BackgroundPattern text="OLYMPIC MARK" />
 	<TopBar />
 
 	<main class="home-page__content">
-		{#each strutture as struttura (struttura.href)}
+		{#each structures as struttura (struttura.href)}
 			<StrutturaTitolo
 				title={struttura.title}
 				city={struttura.city}
