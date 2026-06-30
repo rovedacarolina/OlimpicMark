@@ -18,7 +18,7 @@
 
 		width: 100%;
 
-		padding-top: var(--spacing-5);
+		padding-top: 24px;
 		padding-inline: var(--spacing-6);
 		gap: var(--spacing-4);
 
@@ -53,6 +53,7 @@
 
 	@media (max-width: 768px) {
 		.top-bar {
+			padding-top: 18px;
 			padding-inline: 20px;
 			gap: var(--spacing-3);
 		}
