@@ -102,11 +102,11 @@
 	}
 
 	.accordion__icon {
-		width: 76px;
-		height: 76px;
+		width: 56px;
+		height: 56px;
 
 
-		border-radius: var(--radius-round);
+		border-radius: none;
 
 		display: inline-flex;
 		align-items: center;
