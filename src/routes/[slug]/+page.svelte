@@ -33,7 +33,7 @@
 <style>
 	.detail-page {
 		min-height: 100vh;
-		background: var(--colors-background-primary);
+		background: transparent;
 	}
 
 	.detail-page__content {

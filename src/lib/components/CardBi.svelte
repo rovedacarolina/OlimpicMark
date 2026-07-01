@@ -9,7 +9,8 @@
 		beforeLabel = 'BEFORE',
 		afterLabel = 'AFTER',
 		beforeAlt = 'Immagine prima dell’intervento',
-		afterAlt = 'Immagine dopo l’intervento'
+		afterAlt = 'Immagine dopo l’intervento',
+		height = 'clamp(380px, 56vh, 650px)'
 	} = $props();
 
 	/** @type {HTMLDivElement | undefined} */
@@ -39,7 +40,7 @@
 	});
 </script>
 
-<section class="card-bi" aria-label="Confronto fotografico prima e dopo">
+<section class="card-bi" style={`--card-bi-height: ${height};`} aria-label="Confronto fotografico prima e dopo">
 	<div class="card-bi__compare" bind:this={compareElement}>
 		{#if beforeImage}
 			<img src={beforeImage} alt={beforeAlt} />
@@ -61,7 +62,7 @@
 	.card-bi__compare {
 		position: relative;
 		width: 100%;
-		aspect-ratio: 4 / 3;
+		height: var(--card-bi-height);
 		overflow: hidden;
 		background: rgba(var(--colors-neutral-black-rgb), 0.2);
 	}
@@ -69,7 +70,8 @@
 	.card-bi__compare img {
 		display: block;
 		width: 100%;
-		height: auto;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	:global(.card-bi__compare.icv) {
@@ -110,6 +112,10 @@
 	}
 
 	@media (max-width: 768px) {
+		.card-bi__compare {
+			height: clamp(300px, 50vh, 480px);
+		}
+
 		:global(.card-bi__compare .icv__label) {
 			top: var(--spacing-4);
 			font-size: 18px;

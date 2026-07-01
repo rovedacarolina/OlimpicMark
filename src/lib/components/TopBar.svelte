@@ -22,7 +22,7 @@
 		padding-inline: var(--spacing-6);
 		gap: var(--spacing-4);
 
-		background: var(--colors-background-primary);
+		background: transparent;
 	}
 
 	.top-bar__brand {

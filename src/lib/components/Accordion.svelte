@@ -1,4 +1,6 @@
 <script>
+	import AccordionTabs from './AccordionTabs.svelte';
+
 	let { number = '01', title = '', items = [] } = $props();
 
 	let expandedIndex = $state(-1);
@@ -12,22 +14,27 @@
 	<div class="accordion__list">
 		{#each items as item, index}
 			<div class="accordion__row" class:is-open={expandedIndex === index}>
-				<button class="accordion__trigger" onclick={() => toggleItem(index)}>
+				<button class="accordion__trigger" type="button" onclick={() => toggleItem(index)}>
 					<span>{item.label}</span>
 					<span class="accordion__icon">
-	{#if expandedIndex === index}
-		<i class="fi fi-sr-square-minus"></i>
-	{:else}
-		<i class="fi fi-sr-square-plus"></i>
-	{/if}
-</span>
+						<span
+							class:accordion__mark--minus={expandedIndex === index}
+							class:accordion__mark--plus={expandedIndex !== index}
+							class="accordion__mark"
+							aria-hidden="true"
+						></span>
+					</span>
 				</button>
 
 				{#if expandedIndex === index}
 					<div class="accordion__content">
-						{#each item.content.split('\n\n') as paragraph}
-							<p>{paragraph}</p>
-						{/each}
+						{#if item.tabs?.length}
+							<AccordionTabs tabs={item.tabs} />
+						{:else if item.content}
+							{#each item.content.split('\n\n') as paragraph}
+								<p>{paragraph}</p>
+							{/each}
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -80,62 +87,70 @@
 		text-align: left;
 
 		color: var(--colors-content-secondary);
+		transition: color 0.25s ease;
 	}
-
-	.accordion__trigger {
-	color: var(--colors-content-secondary);
-	transition: color 0.25s ease;
-}
-
-.accordion__trigger {
-	color: var(--colors-content-secondary);
-	transition: color 0.25s ease;
-}
-
-.accordion__icon i {
-	color: var(--colors-content-secondary);
-	transition: color 0.25s ease;
-}
 
 	.accordion__row.is-open .accordion__trigger {
 		margin-bottom: var(--spacing-6);
 	}
 
 	.accordion__icon {
-		width: 56px;
-		height: 56px;
-
-
-		border-radius: none;
+		width: 64px;
+		height: 64px;
 
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 
-		font-size: var(--font-size-display-lg);
-		font-weight: var(--font-weight-black);
-		line-height: 1;
-
 		color: var(--colors-content-secondary);
 		flex-shrink: 0;
 	}
 
-	.accordion__icon,
-.accordion__icon i {
-	color: inherit;
-	transition: color 0.25s ease;
-}
+	.accordion__mark {
+		position: relative;
+		display: block;
+		width: 42px;
+		height: 42px;
+		color: currentColor;
+		transition:
+			color 0.25s ease,
+			transform 0.25s ease;
+	}
 
-.accordion__trigger:hover {
-	color: var(--colors-content-primary);
-}
+	.accordion__mark::before,
+	.accordion__mark::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 100%;
+		height: 5px;
+		border-radius: 999px;
+		background: currentColor;
+		transform: translate(-50%, -50%);
+	}
 
-.accordion__trigger:hover .accordion__icon i {
-	color: var(--colors-content-primary);
-}
+	.accordion__mark::after {
+		transform: translate(-50%, -50%) rotate(90deg);
+		transition: opacity 0.2s ease;
+	}
+
+	.accordion__mark--minus::after {
+		opacity: 0;
+	}
+
+	.accordion__trigger:hover {
+		color: var(--colors-content-primary);
+	}
+
+	.accordion__trigger:hover .accordion__mark {
+		color: var(--colors-content-primary);
+		transform: scale(1.04);
+	}
+
 	.accordion__content {
-		width: min(900px, 82vw);
-		padding-left: var(--spacing-4);
+		width: min(1120px, 82vw);
+		padding-left: 0;
 	}
 
 	.accordion__content p {
@@ -147,7 +162,7 @@
 		line-height: var(--line-height-normal);
 		letter-spacing: var(--letter-spacing-normal);
 
-		color: var(--colors-content-primary);
+		color: var(--colors-content-secondary);
 	}
 
 	.accordion__content p:last-child {
@@ -171,8 +186,16 @@
 		.accordion__icon {
 			width: 48px;
 			height: 48px;
-			border-width: 5px;
-			font-size: var(--font-size-h3);
+		}
+
+		.accordion__mark {
+			width: 34px;
+			height: 34px;
+		}
+
+		.accordion__mark::before,
+		.accordion__mark::after {
+			height: 4px;
 		}
 
 		.accordion__content {

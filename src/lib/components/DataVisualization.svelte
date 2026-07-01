@@ -22,7 +22,7 @@
 	} = $props();
 
 	let activeIndex = $state(0);
-	let isPaused = $state(false);
+	let timerKey = $state(0);
 
 	/** @param {number} index */
 	function getPosition(index) {
@@ -37,26 +37,31 @@
 	/** @param {number} index */
 	function selectIndex(index) {
 		activeIndex = index;
+		timerKey += 1;
+	}
+
+	function showNextItem() {
+		activeIndex = (activeIndex + 1) % items.length;
+		timerKey += 1;
 	}
 
 	$effect(() => {
-		if (isPaused || items.length < 2) return;
+		const index = activeIndex;
+		const key = timerKey;
+		const duration = intervalMs;
 
-		const interval = setInterval(() => {
-			activeIndex = (activeIndex + 1) % items.length;
-		}, intervalMs);
+		if (items.length < 2) return;
 
-		return () => clearInterval(interval);
+		const timeout = setTimeout(showNextItem, duration);
+
+		return () => clearTimeout(timeout);
 	});
 </script>
 
 <section
 	class="data-viz"
 	aria-label="Dati sulla percezione della legacy"
-	onmouseenter={() => (isPaused = true)}
-	onmouseleave={() => (isPaused = false)}
-	onfocusin={() => (isPaused = true)}
-	onfocusout={() => (isPaused = false)}
+	style={`--data-viz-duration: ${intervalMs}ms;`}
 >
 	<div class="data-viz__numbers" aria-hidden="true">
 		{#each items as item, index}
@@ -86,7 +91,13 @@
 				class:is-active={index === activeIndex}
 				onclick={() => selectIndex(index)}
 				aria-label={`Dato ${index + 1}: ${item.value}%`}
-			></button>
+			>
+				{#if index === activeIndex}
+					{#key `${activeIndex}-${timerKey}`}
+						<span class="data-viz__dot-fill" aria-hidden="true"></span>
+					{/key}
+				{/if}
+			</button>
 		{/each}
 	</div>
 </section>
@@ -182,20 +193,38 @@
 	}
 
 	.data-viz__dot {
-		width: 44px;
-		height: 4px;
+		position: relative;
+		width: 72px;
+		height: 5px;
 		border: 0;
 		padding: 0;
+		overflow: hidden;
 		background: rgba(var(--colors-content-secondary-rgb), 0.3);
 		cursor: pointer;
-		transition:
-			background 220ms ease,
-			width 220ms ease;
+		transition: background 220ms ease;
 	}
 
 	.data-viz__dot.is-active {
-		width: 72px;
+		background: rgba(var(--colors-content-secondary-rgb), 0.22);
+	}
+
+	.data-viz__dot:hover {
+		background: rgba(var(--colors-content-secondary-rgb), 0.46);
+	}
+
+	.data-viz__dot-fill {
+		position: absolute;
+		inset: 0;
 		background: var(--colors-content-primary);
+		transform: scaleX(0);
+		transform-origin: left;
+		animation: data-viz-progress var(--data-viz-duration) linear forwards;
+	}
+
+	@keyframes data-viz-progress {
+		to {
+			transform: scaleX(1);
+		}
 	}
 
 	@media (max-width: 1100px) {
@@ -246,6 +275,10 @@
 			max-width: 340px;
 			min-height: 96px;
 			font-size: 22px;
+		}
+
+		.data-viz__dot {
+			width: 54px;
 		}
 	}
 </style>

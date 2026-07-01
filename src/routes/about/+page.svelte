@@ -29,7 +29,7 @@
 <style>
 	.about-page {
 		min-height: 100vh;
-		background: var(--colors-background-primary);
+		background: transparent;
 	}
 
 	.about-page__content {

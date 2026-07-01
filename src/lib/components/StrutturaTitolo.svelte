@@ -1,45 +1,48 @@
 <script>
 	let hovered = $state(false);
-	let typedCity = $state('');
-	/** @type {ReturnType<typeof setInterval> | undefined} */
-	let interval;
+	let prefixWidth = $state(0);
+	/** @type {HTMLSpanElement | undefined} */
+	let prefixMeasure = $state();
 
 	let { title = '', city = '', href = '' } = $props();
+	let prefixText = $derived(city ? `${city} / ` : '');
+	let typewriterDuration = $derived(Math.min(Math.max(city.length * 88, 720), 1320));
 
-	function startTyping() {
+	$effect(() => {
+		if (prefixMeasure) prefixWidth = prefixMeasure.scrollWidth;
+	});
+
+	function showPrefix() {
 		hovered = true;
-		typedCity = '';
-		clearInterval(interval);
-
-		let index = 0;
-
-		interval = setInterval(() => {
-			typedCity = city.slice(0, index + 1);
-			index++;
-
-			if (index >= city.length) {
-				clearInterval(interval);
-			}
-		}, 45);
 	}
 
-	function stopTyping() {
+	function hidePrefix() {
 		hovered = false;
-		typedCity = '';
-		clearInterval(interval);
 	}
 </script>
 
 <a
 	href={href}
 	class="struttura-titolo"
-	onmouseenter={startTyping}
-	onmouseleave={stopTyping}
+	onmouseenter={showPrefix}
+	onmouseleave={hidePrefix}
+	onfocus={showPrefix}
+	onblur={hidePrefix}
 >
 	<h2 class="struttura-titolo__text">
-		{#if hovered}
-			<span class="struttura-titolo__city">{typedCity}</span>
-			<span class="struttura-titolo__separator"> / </span>
+		{#if city}
+			<span
+				class="struttura-titolo__typewriter"
+				class:is-active={hovered}
+				style={`--typewriter-width: ${prefixWidth}px; --typewriter-duration: ${typewriterDuration}ms;`}
+				aria-hidden={!hovered}
+			>
+				<span class="struttura-titolo__measure" bind:this={prefixMeasure}>{prefixText}</span>
+				<span class="struttura-titolo__prefix">
+					<span class="struttura-titolo__city">{city}</span>
+					<span class="struttura-titolo__separator"> / </span>
+				</span>
+			</span>
 		{/if}
 
 		<span class="struttura-titolo__title">{title}</span>
@@ -65,6 +68,32 @@
 		white-space: nowrap;
 	}
 
+	.struttura-titolo__typewriter {
+		position: relative;
+		display: inline-block;
+		width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		vertical-align: top;
+		transition: width var(--typewriter-duration) linear;
+	}
+
+	.struttura-titolo__typewriter.is-active {
+		width: var(--typewriter-width);
+	}
+
+	.struttura-titolo__measure {
+		position: absolute;
+		visibility: hidden;
+		white-space: nowrap;
+		pointer-events: none;
+	}
+
+	.struttura-titolo__prefix {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
 	.struttura-titolo__city,
 	.struttura-titolo__separator {
 		color: var(--colors-content-secondary);
@@ -78,6 +107,10 @@
 		.struttura-titolo__text {
 			font-size: var(--font-size-display-lg);
 			white-space: normal;
+		}
+
+		.struttura-titolo__typewriter {
+			vertical-align: baseline;
 		}
 	}
 </style>
