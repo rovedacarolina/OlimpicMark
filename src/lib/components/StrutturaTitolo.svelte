@@ -5,7 +5,7 @@
 	let prefixMeasure = $state();
 
 	let { title = '', city = '', href = '' } = $props();
-	let prefixText = $derived(city ? `${city} / ` : '');
+	let prefixText = $derived(city ? `${city} /` : '');
 	let typewriterDuration = $derived(Math.min(Math.max(city.length * 88, 720), 1320));
 
 	$effect(() => {
@@ -29,12 +29,15 @@
 	onfocus={showPrefix}
 	onblur={hidePrefix}
 >
-	<h2 class="struttura-titolo__text">
+	<h2
+		class="struttura-titolo__text"
+		class:is-active={hovered}
+		style={`--prefix-width: ${prefixWidth}px; --typewriter-duration: ${typewriterDuration}ms;`}
+	>
 		{#if city}
 			<span
 				class="struttura-titolo__typewriter"
 				class:is-active={hovered}
-				style={`--typewriter-width: ${prefixWidth}px; --typewriter-duration: ${typewriterDuration}ms;`}
 				aria-hidden={!hovered}
 			>
 				<span class="struttura-titolo__measure" bind:this={prefixMeasure}>{prefixText}</span>
@@ -58,6 +61,7 @@
 	}
 
 	.struttura-titolo__text {
+		position: relative;
 		margin: 0;
 		font-family: var(--font-primary);
 		font-size: var(--font-size-hero);
@@ -69,17 +73,19 @@
 	}
 
 	.struttura-titolo__typewriter {
-		position: relative;
-		display: inline-block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: block;
 		width: 0;
 		overflow: hidden;
 		white-space: nowrap;
-		vertical-align: top;
+		pointer-events: none;
 		transition: width var(--typewriter-duration) linear;
 	}
 
 	.struttura-titolo__typewriter.is-active {
-		width: var(--typewriter-width);
+		width: var(--prefix-width);
 	}
 
 	.struttura-titolo__measure {
@@ -100,17 +106,20 @@
 	}
 
 	.struttura-titolo__title {
+		display: inline-block;
 		color: var(--colors-content-primary);
+		transform: translateX(0);
+		transition: transform var(--typewriter-duration) linear;
+	}
+
+	.struttura-titolo__text.is-active .struttura-titolo__title {
+		transform: translateX(var(--prefix-width));
 	}
 
 	@media (max-width: 768px) {
 		.struttura-titolo__text {
 			font-size: var(--font-size-display-lg);
 			white-space: normal;
-		}
-
-		.struttura-titolo__typewriter {
-			vertical-align: baseline;
 		}
 	}
 </style>

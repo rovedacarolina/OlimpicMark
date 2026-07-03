@@ -58,11 +58,13 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-7);
+		gap: 0;
 	}
 
 	.accordion__row {
 		width: 100%;
+		padding-block: var(--spacing-6);
+		border-bottom: 1px solid rgba(var(--colors-content-secondary-rgb), 0.38);
 	}
 
 	.accordion__trigger {
@@ -176,7 +178,11 @@
 		}
 
 		.accordion__list {
-			gap: var(--spacing-6);
+			gap: 0;
+		}
+
+		.accordion__row {
+			padding-block: var(--spacing-5);
 		}
 
 		.accordion__trigger {

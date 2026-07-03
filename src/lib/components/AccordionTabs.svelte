@@ -73,10 +73,10 @@
 		max-width: 100%;
 		display: flex;
 		align-items: center;
-		gap: var(--spacing-5);
+		gap: var(--spacing-6);
 		overflow-x: auto;
-		padding: 0 0 var(--spacing-3);
-		border-bottom: 1px solid rgba(var(--colors-content-secondary-rgb), 0.24);
+		padding: 0 0 var(--spacing-4);
+		border-bottom: 2px solid rgba(var(--colors-content-secondary-rgb), 0.34);
 		background: transparent;
 		scrollbar-width: none;
 		-webkit-overflow-scrolling: touch;
@@ -94,7 +94,7 @@
 		background: transparent;
 		color: rgba(var(--colors-content-secondary-rgb), 0.72);
 		font-family: var(--font-primary);
-		font-size: var(--font-size-caption);
+		font-size: clamp(18px, 1.4vw, 24px);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -109,8 +109,8 @@
 		position: absolute;
 		left: 0;
 		right: 0;
-		bottom: -13px;
-		height: 3px;
+		bottom: -22px;
+		height: 4px;
 		background: var(--colors-content-primary);
 		opacity: 0;
 		transform: scaleX(0);
@@ -143,8 +143,8 @@
 
 	.accordion-tabs__stage {
 		position: relative;
-		min-height: 220px;
-		margin-top: var(--spacing-7);
+		min-height: 320px;
+		margin-top: var(--spacing-8);
 	}
 
 	.accordion-tabs__panel {
@@ -152,8 +152,8 @@
 		z-index: 2;
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-4);
-		max-width: 940px;
+		gap: var(--spacing-5);
+		width: min(980px, 68%);
 	}
 
 	.accordion-tabs__panel h3 {
@@ -171,9 +171,9 @@
 		margin: 0;
 		color: rgba(var(--colors-content-secondary-rgb), 0.88);
 		font-family: var(--font-primary);
-		font-size: var(--font-size-h4);
+		font-size: clamp(36px, 3.2vw, 56px);
 		font-weight: var(--font-weight-regular);
-		line-height: var(--line-height-normal);
+		line-height: var(--line-height-relaxed);
 		letter-spacing: 0;
 	}
 
@@ -183,7 +183,7 @@
 		}
 
 		.accordion-tabs__tab {
-			font-size: 13px;
+			font-size: 16px;
 		}
 
 		.accordion-tabs__stage {
@@ -192,6 +192,7 @@
 		}
 
 		.accordion-tabs__panel {
+			width: 100%;
 			gap: var(--spacing-4);
 		}
 

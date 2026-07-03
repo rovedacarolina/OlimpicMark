@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import PageTransition from '$lib/components/PageTransition.svelte';
 	import SiteGradientBackground from '$lib/components/SiteGradientBackground.svelte';
+	import SiteVideoIntro from '$lib/components/SiteVideoIntro.svelte';
 
 	import '$lib/styles/reset.css';
 	import '$lib/styles/tokens.css';
@@ -26,6 +27,7 @@
 	{@render children()}
 </div>
 
+<SiteVideoIntro />
 <PageTransition />
 
 <style>
