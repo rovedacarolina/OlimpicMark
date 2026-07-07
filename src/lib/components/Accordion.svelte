@@ -151,7 +151,7 @@
 	}
 
 	.accordion__content {
-		width: min(1120px, 82vw);
+		width: 100%;
 		padding-left: 0;
 	}
 

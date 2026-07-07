@@ -164,7 +164,7 @@
 		</section>
 
 		<section class="biathlon-page__verdetto">
-			<Verdetto verdict="POSITIVA" />
+			<Verdetto verdict="positivo" />
 		</section>
 	</main>
 </div>

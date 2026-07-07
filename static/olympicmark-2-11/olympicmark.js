@@ -60,7 +60,7 @@ const transitViews = {
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8',
+  style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8/draft',
   center: landingView.center,
   zoom: landingView.zoom,
   pitch: landingView.pitch,

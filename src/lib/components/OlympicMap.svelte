@@ -516,7 +516,7 @@
 
 				map = new mapboxgl.Map({
 					container: mapElement,
-					style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8',
+					style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8/draft',
 					center: landingView.center,
 					zoom: landingView.zoom,
 					pitch: landingView.pitch,
@@ -747,9 +747,11 @@
 	<div class="olympic-map__landing-overlay" aria-hidden="true"></div>
 
 	<div class="olympic-map__hero">
-		<p class="olympic-map__hero-label">Milano · Cortina 2026</p>
-		<h1 class="olympic-map__hero-title">OLYMPIC<br />MARK</h1>
-		<p class="olympic-map__hero-desc">
+		<p class="olympic-map__hero-label olympic-map__hero-hover">Milano · Cortina 2026</p>
+		<h1 class="olympic-map__hero-title olympic-map__hero-hover" id="mainTitle">
+			<span>I LUOGHI <br />OLIMPICI</span>
+		</h1>
+		<p class="olympic-map__hero-desc olympic-map__hero-hover">
 			Esplora i luoghi olimpici sul territorio.<br />Un atlante interattivo delle eredità dei Giochi.
 		</p>
 		<p class="olympic-map__scroll-hint">Scorri verso il basso <span></span></p>
@@ -869,7 +871,7 @@
 	}
 
 	.olympic-map__hero-label {
-		margin: 0 0 16px;
+		margin: 0 0 13px;
 		color: var(--colors-content-primary);
 		font-family: var(--font-primary);
 		font-size: 0.78rem;
@@ -897,6 +899,10 @@
 		transition: color 0.16s linear;
 	}
 
+	.olympic-map__hero-title span {
+		display: inline-block;
+	}
+
 	.olympic-map__hero-desc {
 		margin: 0 0 40px;
 		color: rgba(255, 255, 255, 0.5);
@@ -905,6 +911,43 @@
 		font-weight: var(--font-weight-regular);
 		line-height: 1.65;
 		letter-spacing: 0;
+	}
+
+	.olympic-map__hero-hover {
+		width: fit-content;
+		pointer-events: auto;
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			color 0.35s ease,
+			opacity 0.35s ease,
+			text-shadow 0.35s ease;
+	}
+
+	.olympic-map__hero-title.olympic-map__hero-hover {
+		transition:
+			color 0.35s ease,
+			opacity 0.35s ease,
+			text-shadow 0.35s ease;
+	}
+
+	.olympic-map__hero-title span {
+		transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.olympic-map__hero-hover:hover {
+		color: var(--colors-neutral-white);
+		text-shadow:
+			0 0 14px rgba(var(--colors-content-primary-rgb), 0.32),
+			0 0 34px rgba(var(--colors-content-primary-rgb), 0.18);
+	}
+
+	.olympic-map__hero-label:hover,
+	.olympic-map__hero-desc:hover {
+		transform: translateX(5px) scale(1.025);
+	}
+
+	.olympic-map__hero-title:hover span {
+		transform: translateX(5px) scale(1.025);
 	}
 
 	.olympic-map__scroll-hint {

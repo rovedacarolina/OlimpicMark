@@ -43,7 +43,7 @@
 				<span class="struttura-titolo__measure" bind:this={prefixMeasure}>{prefixText}</span>
 				<span class="struttura-titolo__prefix">
 					<span class="struttura-titolo__city">{city}</span>
-					<span class="struttura-titolo__separator"> / </span>
+					<span class="struttura-titolo__separator">/</span>
 				</span>
 			</span>
 		{/if}

@@ -153,7 +153,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--spacing-5);
-		width: min(980px, 68%);
+		width: 75%;
 	}
 
 	.accordion-tabs__panel h3 {
@@ -175,6 +175,12 @@
 		font-weight: var(--font-weight-regular);
 		line-height: var(--line-height-relaxed);
 		letter-spacing: 0;
+	}
+
+	@media (max-width: 1024px) {
+		.accordion-tabs__panel {
+			width: 100%;
+		}
 	}
 
 	@media (max-width: 768px) {

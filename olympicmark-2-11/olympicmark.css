@@ -140,7 +140,7 @@ body.map-active #map {
   letter-spacing: 3px;
   text-transform: uppercase;
   color: #0870ED;
-  margin-bottom: 16px;
+  margin-bottom: 13px;
 }
 
 .hero-title {
@@ -503,4 +503,23 @@ body.focus-region-active .place-title.visible {
     top: 18px;
   }
 
+}
+
+/* ── HERO HOVER: effetto attivo su label, titolo e descrizione ── */
+.hero-hover {
+  pointer-events: auto;
+  width: fit-content;
+  transition:
+    transform .35s cubic-bezier(.22,1,.36,1),
+    color .35s ease,
+    opacity .35s ease,
+    text-shadow .35s ease;
+}
+
+.hero-hover:hover {
+  transform: translateX(5px) scale(1.025);
+  color: #ffffff;
+  text-shadow:
+    0 0 14px rgba(8,112,237,.32),
+    0 0 34px rgba(8,112,237,.18);
 }
