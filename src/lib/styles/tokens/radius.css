@@ -1,0 +1,19 @@
+:root {
+  /* Border Radius Scale */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-s: 20px;
+  --radius-m: 40px;
+  --radius-lg: 60px;
+  --radius-xl: 80px;
+
+  /* Special Radius */
+  --radius-round: 50%;
+  --radius-full: 9999px;
+
+  /* Semantic Aliases */
+  --border-radius-tight: var(--radius-xs);
+  --border-radius-small: var(--radius-s);
+  --border-radius-medium: var(--radius-m);
+  --border-radius-large: var(--radius-xl);
+}
