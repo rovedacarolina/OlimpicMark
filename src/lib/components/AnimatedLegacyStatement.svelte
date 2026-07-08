@@ -84,18 +84,22 @@
 
 <style>
 	.legacy-statement {
+		width: 100%;
 		display: flex;
 		justify-content: center;
-		padding-inline: var(--spacing-6);
+		padding-inline: 0;
 		padding-block: var(--spacing-10);
 	}
 
 	.legacy-statement p {
-		width: min(85%, 1400px);
+		width: min(100%, 1400px);
 		margin: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		color: var(--colors-content-secondary);
 		font-family: var(--font-primary);
-		font-size: 64px;
+		font-size: clamp(42px, 4.6vw, 64px);
 		font-weight: var(--font-weight-regular);
 		line-height: 1.35;
 		letter-spacing: 0.08em;
@@ -103,14 +107,24 @@
 		text-transform: uppercase;
 	}
 
+	.legacy-statement p > span {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+
 	.legacy-statement__slot {
-		display: inline-flex;
+		display: flex;
+		justify-content: center;
+		max-width: 100%;
 		white-space: pre;
 		vertical-align: baseline;
 	}
 
 	:global(.legacy-statement__slot.slot-text) {
-		display: inline-flex;
+		display: flex;
+		justify-content: center;
+		max-width: 100%;
 		white-space: pre;
 		vertical-align: baseline;
 	}

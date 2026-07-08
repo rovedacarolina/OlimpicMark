@@ -8,6 +8,7 @@ export { default as AccordionTabs } from './AccordionTabs.svelte';
 export { default as Verdetto } from './Verdetto.svelte';
 export { default as DataVisualization } from './DataVisualization.svelte';
 export { default as AnimatedLegacyStatement } from './AnimatedLegacyStatement.svelte';
+export { default as TeamMember } from './TeamMember.svelte';
 export { default as PageTransition } from './PageTransition.svelte';
 export { default as SiteGradientBackground } from './SiteGradientBackground.svelte';
 export { default as SiteVideoIntro } from './SiteVideoIntro.svelte';
