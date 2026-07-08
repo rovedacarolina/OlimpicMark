@@ -81,11 +81,29 @@
 	@media (max-width: 768px) {
 		.switcher {
 			padding: 5px;
+			border-width: 3px;
 		}
 
 		.switcher__button {
 			width: 42px;
 			height: 42px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.switcher {
+			gap: 3px;
+			padding: 4px;
+		}
+
+		.switcher__button {
+			width: 34px;
+			height: 34px;
+		}
+
+		.switcher__button svg {
+			width: 18px;
+			height: 18px;
 		}
 	}
 </style>

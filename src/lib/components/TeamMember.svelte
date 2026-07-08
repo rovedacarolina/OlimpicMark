@@ -25,6 +25,7 @@
 <style>
 	.team-member {
 		position: relative;
+		min-width: 0;
 		min-height: 440px;
 		display: grid;
 		grid-template-rows: minmax(210px, 1fr) auto;
@@ -75,6 +76,7 @@
 	}
 
 	.team-member__content {
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		gap: var(--spacing-4);
@@ -89,6 +91,7 @@
 		line-height: var(--line-height-tight);
 		letter-spacing: 0;
 		text-transform: uppercase;
+		overflow-wrap: anywhere;
 		transition:
 			color 0.3s ease,
 			text-shadow 0.3s ease;
@@ -175,6 +178,29 @@
 
 		.team-member__roles li:not(:last-child)::after {
 			margin-left: var(--spacing-3);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.team-member {
+			gap: var(--spacing-4);
+			padding: var(--spacing-4) 0;
+		}
+
+		.team-member__visual {
+			width: min(78%, 220px);
+		}
+
+		.team-member__name {
+			font-size: clamp(28px, 9vw, 42px);
+		}
+
+		.team-member__name.is-long-name {
+			font-size: clamp(23px, 6.6vw, 30px);
+		}
+
+		.team-member__roles {
+			font-size: 13px;
 		}
 	}
 </style>

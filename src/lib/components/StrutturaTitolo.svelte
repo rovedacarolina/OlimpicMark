@@ -56,6 +56,7 @@
 	.struttura-titolo {
 		display: block;
 		width: fit-content;
+		max-width: 100%;
 		text-decoration: none;
 		cursor: pointer;
 	}
@@ -64,7 +65,7 @@
 		position: relative;
 		margin: 0;
 		font-family: var(--font-primary);
-		font-size: var(--font-size-hero);
+		font-size: clamp(72px, 8.4vw, var(--font-size-hero));
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -108,6 +109,8 @@
 	.struttura-titolo__title {
 		display: inline-block;
 		color: var(--colors-content-primary);
+		max-width: 100%;
+		overflow-wrap: anywhere;
 		transform: translateX(0);
 		transition: transform var(--typewriter-duration) linear;
 	}
@@ -116,10 +119,30 @@
 		transform: translateX(var(--prefix-width));
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 1024px) {
 		.struttura-titolo__text {
-			font-size: var(--font-size-display-lg);
+			font-size: clamp(58px, 9vw, 96px);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.struttura-titolo {
+			width: 100%;
+		}
+
+		.struttura-titolo__text {
+			font-size: clamp(40px, 12.8vw, var(--font-size-display-lg));
 			white-space: normal;
+		}
+	}
+
+	@media (hover: none) {
+		.struttura-titolo__typewriter {
+			display: none;
+		}
+
+		.struttura-titolo__text.is-active .struttura-titolo__title {
+			transform: none;
 		}
 	}
 </style>

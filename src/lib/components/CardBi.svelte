@@ -62,7 +62,7 @@
 	.card-bi__compare {
 		position: relative;
 		width: 100%;
-		height: var(--card-bi-height);
+		height: min(var(--card-bi-height), 720px);
 		overflow: hidden;
 		background: rgba(var(--colors-neutral-black-rgb), 0.2);
 	}
@@ -111,14 +111,21 @@
 		width: 2px;
 	}
 
+	@media (max-width: 1024px) {
+		.card-bi__compare {
+			height: clamp(420px, 62vh, 620px);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.card-bi__compare {
-			height: clamp(300px, 50vh, 480px);
+			height: clamp(320px, 54vh, 500px);
 		}
 
 		:global(.card-bi__compare .icv__label) {
 			top: var(--spacing-4);
-			font-size: 18px;
+			font-size: clamp(14px, 3vw, 18px);
+			padding: 8px 10px;
 		}
 
 		:global(.card-bi__compare .icv__label-before) {
@@ -127,6 +134,25 @@
 
 		:global(.card-bi__compare .icv__label-after) {
 			right: var(--spacing-4);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.card-bi__compare {
+			height: clamp(260px, 46vh, 390px);
+		}
+
+		:global(.card-bi__compare .icv__label) {
+			top: var(--spacing-3);
+			font-size: 12px;
+		}
+
+		:global(.card-bi__compare .icv__label-before) {
+			left: var(--spacing-3);
+		}
+
+		:global(.card-bi__compare .icv__label-after) {
+			right: var(--spacing-3);
 		}
 	}
 </style>

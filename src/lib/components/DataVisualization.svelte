@@ -106,7 +106,7 @@
 	.data-viz {
 		position: relative;
 		width: 100%;
-		min-height: 620px;
+		min-height: clamp(500px, 56vw, 620px);
 		padding-block: var(--spacing-8);
 		overflow: hidden;
 	}
@@ -172,11 +172,11 @@
 	}
 
 	.data-viz__text {
-		max-width: 680px;
+		width: min(100%, 680px);
 		min-height: 86px;
 		margin: var(--spacing-6) auto 0;
 		font-family: var(--font-secondary);
-		font-size: var(--font-size-h2);
+		font-size: clamp(30px, 3.4vw, var(--font-size-h2));
 		font-weight: var(--font-weight-regular);
 		line-height: var(--line-height-normal);
 		letter-spacing: 0;
@@ -228,6 +228,14 @@
 	}
 
 	@media (max-width: 1100px) {
+		.data-viz {
+			min-height: 540px;
+		}
+
+		.data-viz__numbers {
+			height: 300px;
+		}
+
 		.data-viz__item span {
 			font-size: 86px;
 		}
@@ -242,6 +250,24 @@
 
 		.data-viz__item.is-next {
 			transform: translate(calc(-50% + 260px), -50%) scale(0.74);
+		}
+	}
+
+	@media (max-width: 900px) {
+		.data-viz__item span {
+			font-size: 66px;
+		}
+
+		.data-viz__item.is-active span {
+			font-size: 150px;
+		}
+
+		.data-viz__item.is-previous {
+			transform: translate(calc(-50% - 205px), -50%) scale(0.72);
+		}
+
+		.data-viz__item.is-next {
+			transform: translate(calc(-50% + 205px), -50%) scale(0.72);
 		}
 	}
 
@@ -272,13 +298,56 @@
 		}
 
 		.data-viz__text {
-			max-width: 340px;
+			width: min(100%, 430px);
 			min-height: 96px;
-			font-size: 22px;
+			font-size: clamp(20px, 5.2vw, 28px);
 		}
 
 		.data-viz__dot {
-			width: 54px;
+			width: clamp(44px, 14vw, 54px);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.data-viz {
+			min-height: 390px;
+			padding-block: var(--spacing-5);
+		}
+
+		.data-viz__numbers {
+			height: 190px;
+		}
+
+		.data-viz__item span {
+			font-size: 38px;
+		}
+
+		.data-viz__item.is-active span {
+			font-size: 86px;
+		}
+
+		.data-viz__item.is-previous {
+			transform: translate(calc(-50% - 106px), -50%) scale(0.7);
+		}
+
+		.data-viz__item.is-next {
+			transform: translate(calc(-50% + 106px), -50%) scale(0.7);
+		}
+
+		.data-viz__text {
+			min-height: 86px;
+			margin-top: var(--spacing-4);
+			font-size: clamp(18px, 5.8vw, 24px);
+		}
+
+		.data-viz__controls {
+			gap: var(--spacing-2);
+			margin-top: var(--spacing-4);
+		}
+
+		.data-viz__dot {
+			width: clamp(42px, 18vw, 58px);
+			height: 4px;
 		}
 	}
 </style>

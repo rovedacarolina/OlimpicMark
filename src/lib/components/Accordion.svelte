@@ -81,7 +81,7 @@
 		cursor: pointer;
 
 		font-family: var(--font-secondary);
-		font-size: clamp(66px, 6.9vw, var(--font-size-hero));
+		font-size: clamp(60px, 6.9vw, var(--font-size-hero));
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -176,6 +176,32 @@
 		margin-bottom: 0;
 	}
 
+	@media (max-width: 1100px) {
+		.accordion {
+			min-height: auto;
+			padding-block: var(--spacing-9);
+		}
+
+		.accordion__row {
+			padding-block: var(--spacing-5);
+		}
+
+		.accordion__trigger {
+			gap: var(--spacing-4);
+			font-size: clamp(42px, 6.4vw, 78px);
+		}
+
+		.accordion__icon {
+			width: 52px;
+			height: 52px;
+		}
+
+		.accordion__mark {
+			width: 34px;
+			height: 34px;
+		}
+	}
+
 	@media (max-width: 768px) {
 		.accordion {
 			min-height: auto;
@@ -192,7 +218,7 @@
 
 		.accordion__trigger {
 			gap: var(--spacing-3);
-			font-size: clamp(24px, 7.4vw, var(--font-size-display-lg));
+			font-size: clamp(23px, 6.7vw, 46px);
 			letter-spacing: 0;
 		}
 
@@ -218,6 +244,36 @@
 
 		.accordion__content p {
 			font-size: var(--font-size-body);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.accordion {
+			padding-block: var(--spacing-7);
+		}
+
+		.accordion__row {
+			padding-block: var(--spacing-4);
+		}
+
+		.accordion__trigger {
+			gap: var(--spacing-2);
+			font-size: clamp(19px, 6vw, 28px);
+		}
+
+		.accordion__icon {
+			width: 30px;
+			height: 30px;
+		}
+
+		.accordion__mark {
+			width: 22px;
+			height: 22px;
+		}
+
+		.accordion__mark::before,
+		.accordion__mark::after {
+			height: 2px;
 		}
 	}
 </style>

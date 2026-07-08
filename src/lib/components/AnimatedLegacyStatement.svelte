@@ -105,6 +105,7 @@
 		letter-spacing: 0.08em;
 		text-align: center;
 		text-transform: uppercase;
+		overflow-wrap: anywhere;
 	}
 
 	.legacy-statement p > span {
@@ -117,15 +118,17 @@
 		display: flex;
 		justify-content: center;
 		max-width: 100%;
-		white-space: pre;
+		white-space: normal;
 		vertical-align: baseline;
+		overflow-wrap: anywhere;
 	}
 
 	:global(.legacy-statement__slot.slot-text) {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: center;
 		max-width: 100%;
-		white-space: pre;
+		white-space: normal;
 		vertical-align: baseline;
 	}
 
@@ -161,8 +164,13 @@
 	}
 
 	@media (max-width: 1024px) {
+		.legacy-statement {
+			padding-block: var(--spacing-9);
+		}
+
 		.legacy-statement p {
-			font-size: var(--font-size-body-lg);
+			font-size: clamp(30px, 5.2vw, var(--font-size-body-lg));
+			letter-spacing: 0.04em;
 		}
 	}
 
@@ -174,7 +182,7 @@
 
 		.legacy-statement p {
 			width: 100%;
-			font-size: var(--font-size-h2);
+			font-size: clamp(24px, 8vw, var(--font-size-h2));
 			line-height: var(--line-height-normal);
 			letter-spacing: 0;
 		}
@@ -182,6 +190,16 @@
 		.legacy-statement__slot {
 			justify-content: center;
 			width: 100%;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.legacy-statement {
+			padding-block: var(--spacing-7);
+		}
+
+		.legacy-statement p {
+			font-size: clamp(20px, 7.4vw, 30px);
 		}
 	}
 </style>

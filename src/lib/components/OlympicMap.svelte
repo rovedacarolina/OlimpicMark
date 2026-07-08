@@ -1351,6 +1351,27 @@
 		will-change: transform;
 	}
 
+	@media (max-width: 1024px) {
+		.olympic-map__hero {
+			left: var(--spacing-6);
+			max-width: min(520px, 58vw);
+		}
+
+		.olympic-map__hero-title {
+			font-size: clamp(3.2rem, 9.5vw, 6.4rem);
+		}
+
+		.place-preview {
+			width: 160px;
+		}
+
+		.place-title {
+			left: var(--spacing-5);
+			bottom: var(--spacing-5);
+			font-size: clamp(2.4rem, 7vw, 5rem);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.olympic-map__landing-overlay {
 			background: linear-gradient(
@@ -1369,11 +1390,13 @@
 		}
 
 		.olympic-map__hero-title {
-			font-size: clamp(3.4rem, 17vw, 5.8rem);
+			font-size: clamp(3rem, 15vw, 5.4rem);
 		}
 
 		.olympic-map__hero-desc {
-			font-size: 0.95rem;
+			max-width: 32rem;
+			font-size: 0.92rem;
+			line-height: var(--line-height-relaxed);
 		}
 
 		.olympic-map__scroll-hint {
@@ -1383,6 +1406,18 @@
 
 		.map-controls {
 			right: 14px;
+			gap: 7px;
+		}
+
+		.map-ctrl-btn {
+			width: 40px;
+			height: 40px;
+			border-radius: 10px;
+		}
+
+		.route-btn::after,
+		.region-tooltip {
+			display: none;
 		}
 
 		.place-preview {
@@ -1392,7 +1427,74 @@
 		.place-title {
 			left: 20px;
 			bottom: 28px;
-			font-size: clamp(2.2rem, 12vw, 4.4rem);
+			max-width: calc(100vw - 40px);
+			font-size: clamp(2rem, 11vw, 4rem);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.olympic-map__hero {
+			left: 16px;
+			right: 16px;
+		}
+
+		.olympic-map__hero-label {
+			font-size: 0.68rem;
+			letter-spacing: 2px;
+		}
+
+		.olympic-map__hero-title {
+			margin-bottom: var(--spacing-4);
+			font-size: clamp(2.6rem, 15vw, 4.4rem);
+		}
+
+		.olympic-map__hero-desc {
+			font-size: 0.84rem;
+		}
+
+		.olympic-map__scroll-hint {
+			letter-spacing: 2px;
+		}
+
+		.olympic-map__status {
+			left: 16px;
+			bottom: 16px;
+			font-size: 12px;
+		}
+
+		.map-controls {
+			right: 10px;
+		}
+
+		.map-ctrl-btn {
+			width: 36px;
+			height: 36px;
+		}
+
+		.map-ctrl-btn svg {
+			width: 18px;
+			height: 18px;
+		}
+
+		.place-title {
+			left: 16px;
+			bottom: 22px;
+			max-width: calc(100vw - 32px);
+		}
+
+		:global(.site-marker) {
+			width: 36px;
+			height: 36px;
+		}
+
+		:global(.marker-dot) {
+			width: 25px;
+			height: 25px;
+		}
+
+		:global(.marker-dot::before) {
+			width: 9px;
+			height: 9px;
 		}
 	}
 </style>

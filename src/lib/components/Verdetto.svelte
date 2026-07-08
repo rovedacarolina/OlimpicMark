@@ -214,6 +214,25 @@
 		will-change: left, opacity, transform;
 	}
 
+	@media (max-width: 1024px) {
+		.verdetto {
+			min-height: 500px;
+			padding-block: var(--spacing-9);
+		}
+
+		.verdetto__statement {
+			font-size: clamp(28px, 5.2vw, 58px);
+		}
+
+		.verdetto__card {
+			min-height: clamp(150px, 26vw, 230px);
+		}
+
+		.verdetto__word {
+			font-size: clamp(58px, 15vw, 160px);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.verdetto {
 			min-height: 420px;
@@ -225,7 +244,7 @@
 		}
 
 		.verdetto__statement {
-			font-size: var(--font-size-h4);
+			font-size: clamp(22px, 6.4vw, var(--font-size-h4));
 			line-height: var(--line-height-normal);
 		}
 
@@ -236,6 +255,29 @@
 		.verdetto__word {
 			font-size: clamp(52px, 19vw, 110px);
 			padding-inline: var(--spacing-4);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.verdetto {
+			min-height: 360px;
+			padding-block: var(--spacing-7);
+		}
+
+		.verdetto__inner {
+			gap: var(--spacing-5);
+		}
+
+		.verdetto__statement {
+			font-size: clamp(19px, 6.2vw, 28px);
+		}
+
+		.verdetto__card {
+			min-height: 126px;
+		}
+
+		.verdetto__word {
+			font-size: clamp(42px, 18vw, 78px);
 		}
 	}
 </style>

@@ -53,6 +53,7 @@
 <style>
 	.about-page {
 		min-height: 100vh;
+		overflow-x: hidden;
 		background: transparent;
 		text-transform: uppercase;
 	}
@@ -85,6 +86,7 @@
 		font-weight: var(--font-weight-black);
 		line-height: 0.95;
 		letter-spacing: 0;
+		overflow-wrap: anywhere;
 	}
 
 	.about-page__intro p {
@@ -97,6 +99,7 @@
 		font-weight: var(--font-weight-regular);
 		line-height: var(--line-height-relaxed);
 		letter-spacing: 0;
+		overflow-wrap: anywhere;
 	}
 
 	.about-page__team {
@@ -119,11 +122,12 @@
 
 		h1 {
 			max-width: 860px;
+			font-size: clamp(58px, 10vw, var(--font-size-hero));
 		}
 
 		.about-page__intro p {
 			max-width: 920px;
-			font-size: var(--font-size-body-lg);
+			font-size: clamp(26px, 4vw, var(--font-size-body-lg));
 			line-height: var(--line-height-relaxed);
 		}
 	}
@@ -147,13 +151,32 @@
 		}
 
 		.about-page__intro p {
-			font-size: var(--font-size-ui-sm);
+			font-size: clamp(20px, 5.6vw, var(--font-size-ui-sm));
 			line-height: var(--line-height-relaxed);
 		}
 
 		.about-page__team {
 			grid-template-columns: 1fr;
 			gap: 0;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.about-page__content {
+			padding-inline: 16px;
+			padding-top: var(--spacing-6);
+		}
+
+		.about-page__intro {
+			padding-bottom: var(--spacing-7);
+		}
+
+		h1 {
+			font-size: clamp(38px, 14vw, 58px);
+		}
+
+		.about-page__intro p {
+			font-size: clamp(17px, 5.2vw, 21px);
 		}
 	}
 </style>

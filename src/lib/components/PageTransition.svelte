@@ -125,8 +125,8 @@
 		position: fixed;
 		inset: 0;
 		z-index: 1000;
-		width: 100vw;
-		height: 100vh;
+		width: 100%;
+		height: 100dvh;
 		visibility: hidden;
 		pointer-events: none;
 	}

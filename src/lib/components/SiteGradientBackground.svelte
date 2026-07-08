@@ -206,4 +206,16 @@
 			animation: none;
 		}
 	}
+
+	@media (max-width: 768px) {
+		.site-gradient-bg {
+			--gradient-size: 108vmax;
+		}
+
+		.site-gradient-bg__field {
+			inset: -12vmax;
+			filter: url('#site-gradient-blur') blur(34px);
+			opacity: 0.68;
+		}
+	}
 </style>

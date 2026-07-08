@@ -34,6 +34,8 @@
 	.site-layout-content {
 		position: relative;
 		z-index: 1;
+		width: 100%;
 		min-height: 100vh;
+		overflow-x: hidden;
 	}
 </style>

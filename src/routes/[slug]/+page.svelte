@@ -33,6 +33,7 @@
 <style>
 	.detail-page {
 		min-height: 100vh;
+		overflow-x: hidden;
 		background: transparent;
 	}
 
@@ -44,10 +45,11 @@
 		padding-inline: var(--spacing-6);
 		padding-top: var(--spacing-6);
 		padding-bottom: var(--spacing-10);
+		width: 100%;
 	}
 
 	.detail-page__intro {
-		max-width: 1180px;
+		width: min(100%, 1180px);
 		padding-block: var(--spacing-8);
 	}
 
@@ -59,6 +61,7 @@
 		letter-spacing: var(--letter-spacing-wide);
 		text-transform: uppercase;
 		color: var(--colors-content-secondary);
+		overflow-wrap: anywhere;
 	}
 
 	.detail-page__status {
@@ -69,7 +72,7 @@
 
 	.detail-page__status span {
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui-sm);
+		font-size: clamp(16px, 2vw, var(--font-size-ui-sm));
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -77,10 +80,44 @@
 		color: var(--colors-content-primary);
 	}
 
+	@media (max-width: 1024px) {
+		.detail-page__content {
+			padding-inline: var(--spacing-5);
+			padding-top: var(--spacing-5);
+		}
+
+		.detail-page__intro {
+			padding-block: var(--spacing-7);
+		}
+
+		.detail-page__intro p {
+			font-size: clamp(30px, 6vw, 64px);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.detail-page__content {
 			padding-inline: 20px;
-			padding-top: 32px;
+			padding-top: var(--spacing-5);
+			padding-bottom: var(--spacing-9);
+		}
+
+		.detail-page__intro {
+			padding-block: var(--spacing-6);
+		}
+
+		.detail-page__intro p {
+			font-size: clamp(24px, 8vw, 42px);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.detail-page__content {
+			padding-inline: 16px;
+		}
+
+		.detail-page__intro p {
+			font-size: clamp(21px, 7vw, 32px);
 		}
 	}
 </style>

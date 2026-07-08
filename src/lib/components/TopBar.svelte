@@ -13,7 +13,7 @@
 <style>
 	.top-bar {
 		display: grid;
-		grid-template-columns: 1fr auto 1fr;
+		grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
 		align-items: center;
 
 		width: 100%;
@@ -36,7 +36,7 @@
 	.top-bar__brand,
 	.top-bar__link {
 		font-family: var(--font-primary);
-		font-size: var(--font-size-ui-sm);
+		font-size: clamp(13px, 1.2vw, var(--font-size-ui-sm));
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: 0;
@@ -55,12 +55,23 @@
 		.top-bar {
 			padding-top: 18px;
 			padding-inline: 20px;
-			gap: var(--spacing-3);
+			gap: var(--spacing-2);
 		}
 
 		.top-bar__brand,
 		.top-bar__link {
-			font-size: 16px;
+			font-size: clamp(12px, 3.3vw, 16px);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.top-bar {
+			padding-inline: 16px;
+		}
+
+		.top-bar__brand,
+		.top-bar__link {
+			font-size: 11px;
 		}
 	}
 </style>

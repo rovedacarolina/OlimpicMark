@@ -172,6 +172,7 @@
 <style>
 	.biathlon-page {
 		min-height: 100vh;
+		overflow-x: hidden;
 		background: transparent;
 	}
 
@@ -181,6 +182,7 @@
 		padding-inline: var(--spacing-6);
 		padding-top: var(--spacing-6);
 		padding-bottom: var(--spacing-10);
+		width: 100%;
 	}
 
 	.biathlon-page__data {
@@ -199,5 +201,42 @@
 	.biathlon-page__content {
 		position: relative;
 		z-index: 1;
+	}
+
+	@media (max-width: 1024px) {
+		.biathlon-page__content {
+			padding-inline: var(--spacing-5);
+			padding-top: var(--spacing-5);
+		}
+
+		.biathlon-page__data,
+		.biathlon-page__accordion,
+		.biathlon-page__verdetto {
+			padding-top: var(--spacing-9);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.biathlon-page__content {
+			padding-inline: 20px;
+			padding-top: var(--spacing-5);
+			padding-bottom: var(--spacing-9);
+		}
+
+		.biathlon-page__data {
+			padding-top: var(--spacing-8);
+			padding-bottom: var(--spacing-8);
+		}
+
+		.biathlon-page__accordion,
+		.biathlon-page__verdetto {
+			padding-top: var(--spacing-8);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.biathlon-page__content {
+			padding-inline: 16px;
+		}
 	}
 </style>
