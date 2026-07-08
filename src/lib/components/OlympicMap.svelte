@@ -866,7 +866,7 @@
 		max-width: 500px;
 		pointer-events: none;
 		opacity: calc(1 - var(--map-intro-progress));
-		transform: translateY(calc(-50% + (var(--map-intro-progress) * -18px)));
+		transform: translateY(-50%);
 		animation: map-hero-enter 0.9s ease;
 	}
 
@@ -890,12 +890,6 @@
 		line-height: 0.92;
 		letter-spacing: 0;
 		text-transform: uppercase;
-		transform-origin: top left;
-		transform: translate(
-				calc(var(--map-intro-progress) * -5.6vw),
-				calc(var(--map-intro-progress) * -34vh)
-			)
-			scale(calc(1 - (var(--map-intro-progress) * 0.54)));
 		transition: color 0.16s linear;
 	}
 
@@ -978,7 +972,7 @@
 	@keyframes map-hero-enter {
 		from {
 			opacity: 0;
-			transform: translateY(calc(-50% + 24px));
+			transform: translateY(-50%);
 		}
 
 		to {

@@ -15,7 +15,7 @@
 		{#each items as item, index}
 			<div class="accordion__row" class:is-open={expandedIndex === index}>
 				<button class="accordion__trigger" type="button" onclick={() => toggleItem(index)}>
-					<span>{item.label}</span>
+					<span class="accordion__label">{item.label}</span>
 					<span class="accordion__icon">
 						<span
 							class:accordion__mark--minus={expandedIndex === index}
@@ -81,7 +81,7 @@
 		cursor: pointer;
 
 		font-family: var(--font-secondary);
-		font-size: var(--font-size-hero);
+		font-size: clamp(66px, 6.9vw, var(--font-size-hero));
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -90,6 +90,11 @@
 
 		color: var(--colors-content-secondary);
 		transition: color 0.25s ease;
+	}
+
+	.accordion__label {
+		min-width: 0;
+		white-space: nowrap;
 	}
 
 	.accordion__row.is-open .accordion__trigger {
@@ -186,22 +191,24 @@
 		}
 
 		.accordion__trigger {
-			font-size: var(--font-size-display-lg);
+			gap: var(--spacing-3);
+			font-size: clamp(24px, 7.4vw, var(--font-size-display-lg));
+			letter-spacing: 0;
 		}
 
 		.accordion__icon {
-			width: 48px;
-			height: 48px;
+			width: 38px;
+			height: 38px;
 		}
 
 		.accordion__mark {
-			width: 34px;
-			height: 34px;
+			width: 28px;
+			height: 28px;
 		}
 
 		.accordion__mark::before,
 		.accordion__mark::after {
-			height: 4px;
+			height: 3px;
 		}
 
 		.accordion__content {
