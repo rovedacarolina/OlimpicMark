@@ -72,10 +72,16 @@
   <!-- Controlli della mappa: identici al tuo secondo HTML, ma visibili solo nella vista mappa -->
   <div class="map-controls">
     <button class="map-ctrl-btn" id="resetBtn" title="Vista generale">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
-        <path d="M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L4 21l8-4 8 4-8-19z"/>
+        <path d="M12 2v15"/>
+      </svg>
+    </button>
+    <button class="map-ctrl-btn route-btn" id="routeBtn" title="Inizio percorso">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 19c4-9 10 1 14-10"/>
+        <circle cx="5" cy="19" r="2"/>
+        <circle cx="19" cy="9" r="2"/>
       </svg>
     </button>
     <button class="map-ctrl-btn" id="zoomInBtn" title="Zoom in">
@@ -98,6 +104,7 @@
     <img id="placePreviewImg" src="" alt="" />
   </div>
   <div class="place-title" id="placeTitle" aria-hidden="true"></div>
+  <div class="region-tooltip" id="regionTooltip" aria-hidden="true"></div>
 
   <div class="photo-modal" id="photoModal">
     <button class="photo-close" id="photoClose">✕</button>

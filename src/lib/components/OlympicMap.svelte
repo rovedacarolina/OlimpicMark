@@ -8,54 +8,81 @@
 		'pk.eyJ1IjoiYWxlc3NpYXZhc2lsaXUiLCJhIjoiY21wZHNjM2dhMDlwaTJzc2NsN3JoMGhzNSJ9.25VVjXm9hRy_VOh8MD2q1w';
 
 	const landingView = {
-		center: [11.2, 46.1],
+		center: [10.45, 46.1],
 		zoom: 7.2,
-		pitch: 45,
-		bearing: -10
+		pitch: 34,
+		bearing: -8
 	};
 
 	const mapView = {
 		center: [10.8, 46.0],
 		zoom: 7.8,
-		pitch: 70,
-		bearing: -20
+		pitch: 32,
+		bearing: -10
 	};
 
+	/** @type {Record<string, { center: number[], zoom: number, pitch: number, bearing: number }>} */
 	const focusViews = {
 		milano: {
 			center: [9.175, 45.475],
 			zoom: 10.15,
-			pitch: 48,
+			pitch: 30,
+			bearing: -12
+		},
+		bormio: {
+			center: [10.375, 46.47],
+			zoom: 10.15,
+			pitch: 30,
+			bearing: -12
+		},
+		livigno: {
+			center: [10.135, 46.535],
+			zoom: 10.15,
+			pitch: 30,
 			bearing: -12
 		},
 		cortina: {
 			center: [12.1357, 46.5404],
 			zoom: 10.15,
-			pitch: 48,
+			pitch: 30,
 			bearing: -12
 		},
 		anterselva: {
-			center: [12.035, 46.855],
+			center: [12.06, 46.89],
 			zoom: 10.15,
-			pitch: 48,
+			pitch: 30,
 			bearing: -12
 		}
 	};
 
 	const transitViews = {
-		milanoToCortina: {
-			center: [10.65, 46.1],
-			zoom: 8.05,
-			pitch: 54,
+		milanoToBormio: {
+			center: [9.78, 45.96],
+			zoom: 8.35,
+			pitch: 30,
+			bearing: -16
+		},
+		bormioToLivigno: {
+			center: [10.25, 46.5],
+			zoom: 9.05,
+			pitch: 30,
+			bearing: -16
+		},
+		livignoToCortina: {
+			center: [11.1, 46.55],
+			zoom: 8.15,
+			pitch: 30,
 			bearing: -16
 		},
 		cortinaToAnterselva: {
 			center: [12.08, 46.69],
 			zoom: 8.85,
-			pitch: 54,
+			pitch: 30,
 			bearing: -16
 		}
 	};
+
+	const routeSequence = ['milano', 'bormio', 'livigno', 'cortina', 'anterselva'];
 
 	const locations = [
 		{
@@ -83,6 +110,22 @@
 			href: '/palahockey'
 		},
 		{
+			id: 'nuova-cabinovia-bormio',
+			region: 'bormio',
+			name: 'Nuova Cabinovia Bormio',
+			coords: [10.3727, 46.4676],
+			photo: '/olympicmark-2-11/images/rho2.jpg',
+			href: '/cabinovia'
+		},
+		{
+			id: 'bacino-innevamento-livigno',
+			region: 'livigno',
+			name: 'Bacino di innevamento Livigno',
+			coords: [10.135, 46.538],
+			photo: '/olympicmark-2-11/images/sb2.jpg',
+			href: '/innevamento'
+		},
+		{
 			id: 'pista-bob-cortina',
 			region: 'cortina',
 			name: 'Pista da Bob Cortina',
@@ -94,7 +137,7 @@
 			id: 'anterselva-biathlon',
 			region: 'anterselva',
 			name: 'Anterselva Biathlon',
-			coords: [12.1696, 46.93],
+			coords: [12.1696, 46.908],
 			photo: '/olympicmark-2-11/images/sb3.jpg',
 			href: '/biathlon'
 		}
@@ -114,6 +157,8 @@
 	let placePreviewImg;
 	/** @type {HTMLDivElement | undefined} */
 	let placeTitle;
+	/** @type {HTMLDivElement | undefined} */
+	let regionTooltip;
 
 	/** @type {any} */
 	let map;
@@ -122,6 +167,8 @@
 	let mapReady = $state(false);
 	let mapError = $state('');
 	let frameRequested = false;
+	let activeRouteRegion = '';
+	let routeIndex = -1;
 
 	/** @param {string} src */
 	function loadScript(src) {
@@ -212,46 +259,71 @@
 	function getFocusView(progress) {
 		const p = clamp(progress);
 
-		if (p < 0.2) {
+		if (p < 0.12) {
 			return {
-				view: interpolateView(mapView, focusViews.milano, p / 0.2),
+				view: interpolateView(mapView, focusViews.milano, p / 0.12),
 				region: ''
 			};
 		}
 
-		if (p < 0.34) return { view: focusViews.milano, region: 'milano' };
+		if (p < 0.22) return { view: focusViews.milano, region: 'milano' };
 
-		if (p < 0.48) {
+		if (p < 0.32) {
 			return {
-				view: interpolateView(focusViews.milano, transitViews.milanoToCortina, (p - 0.34) / 0.14),
+				view: interpolateView(focusViews.milano, transitViews.milanoToBormio, (p - 0.22) / 0.1),
 				region: ''
 			};
 		}
+
+		if (p < 0.42) {
+			return {
+				view: interpolateView(transitViews.milanoToBormio, focusViews.bormio, (p - 0.32) / 0.1),
+				region: ''
+			};
+		}
+
+		if (p < 0.5) return { view: focusViews.bormio, region: 'bormio' };
 
 		if (p < 0.6) {
 			return {
-				view: interpolateView(transitViews.milanoToCortina, focusViews.cortina, (p - 0.48) / 0.12),
+				view: interpolateView(focusViews.bormio, transitViews.bormioToLivigno, (p - 0.5) / 0.1),
 				region: ''
 			};
 		}
 
-		if (p < 0.72) return { view: focusViews.cortina, region: 'cortina' };
+		if (p < 0.68) return { view: focusViews.livigno, region: 'livigno' };
 
-		if (p < 0.81) {
+		if (p < 0.77) {
 			return {
-				view: interpolateView(focusViews.cortina, transitViews.cortinaToAnterselva, (p - 0.72) / 0.09),
+				view: interpolateView(focusViews.livigno, transitViews.livignoToCortina, (p - 0.68) / 0.09),
 				region: ''
 			};
 		}
 
-		if (p < 0.92) {
+		if (p < 0.84) {
 			return {
-				view: interpolateView(transitViews.cortinaToAnterselva, focusViews.anterselva, (p - 0.81) / 0.11),
+				view: interpolateView(transitViews.livignoToCortina, focusViews.cortina, (p - 0.77) / 0.07),
 				region: ''
 			};
 		}
 
-		return { view: focusViews.anterselva, region: 'anterselva' };
+		if (p < 0.89) return { view: focusViews.cortina, region: 'cortina' };
+
+		if (p < 0.96) {
+			return {
+				view: interpolateView(focusViews.cortina, transitViews.cortinaToAnterselva, (p - 0.89) / 0.07),
+				region: ''
+			};
+		}
+
+		return {
+			view: interpolateView(
+				transitViews.cortinaToAnterselva,
+				focusViews.anterselva,
+				(p - 0.96) / 0.04
+			),
+			region: 'anterselva'
+		};
 	}
 
 	/** @param {{ center: number[], zoom: number, pitch: number, bearing: number }} view */
@@ -360,9 +432,11 @@
 		const height = Math.max(focusSpace.offsetHeight - window.innerHeight, 1);
 		/** @type {Record<string, number>} */
 		const progressByRegion = {
-			milano: 0.28,
-			cortina: 0.66,
-			anterselva: 0.97
+			milano: 0.18,
+			bormio: 0.46,
+			livigno: 0.66,
+			cortina: 0.86,
+			anterselva: 0.99
 		};
 
 		return start + height * (progressByRegion[region] ?? 0.3);
@@ -370,13 +444,12 @@
 
 	/** @param {string} region */
 	function scrollToRegion(region) {
-		window.scrollTo({
-			top: getRegionScrollTop(region),
-			behavior: 'smooth'
-		});
+		goToRouteStep(region);
 	}
 
 	function resetView() {
+		activeRouteRegion = '';
+		routeIndex = -1;
 		hideAllMarkers();
 		setIntroProgress(1);
 		window.scrollTo({ top: getOverviewScrollTop(), behavior: 'smooth' });
@@ -398,6 +471,31 @@
 		map?.zoomOut({ duration: 400 });
 	}
 
+	/** @param {string} region */
+	function goToRouteStep(region) {
+		const view = focusViews[region];
+		if (!view) return;
+
+		activeRouteRegion = region;
+		hidePlacePreview();
+		setIntroProgress(1);
+		setMapInteractivity(true);
+		setVisibleRegion(region);
+
+		map?.flyTo({
+			...view,
+			duration: 1800,
+			curve: 1.25,
+			speed: 0.7,
+			essential: true
+		});
+	}
+
+	function goToNextRouteStep() {
+		routeIndex = (routeIndex + 1) % routeSequence.length;
+		goToRouteStep(routeSequence[routeIndex]);
+	}
+
 	/** @param {any} feature @param {any} lngLat */
 	function inferRegionFromFeature(feature, lngLat = null) {
 		const props = feature?.properties || {};
@@ -415,6 +513,8 @@
 			.toLowerCase();
 
 		if (rawName.includes('milano') || rawName.includes('milan')) return 'milano';
+		if (rawName.includes('bormio')) return 'bormio';
+		if (rawName.includes('livigno')) return 'livigno';
 		if (rawName.includes('cortina')) return 'cortina';
 		if (
 			rawName.includes('rasun') ||
@@ -430,11 +530,43 @@
 			const lat = lngLat.lat;
 
 			if (lng > 8.85 && lng < 9.45 && lat > 45.3 && lat < 45.65) return 'milano';
+			if (lng > 10.2 && lng < 10.55 && lat > 46.35 && lat < 46.6) return 'bormio';
+			if (lng > 9.95 && lng < 10.35 && lat > 46.45 && lat < 46.7) return 'livigno';
 			if (lng > 11.85 && lng < 12.45 && lat > 46.35 && lat < 46.75) return 'cortina';
 			if (lng > 11.85 && lng < 12.45 && lat > 46.75 && lat < 47.05) return 'anterselva';
 		}
 
 		return '';
+	}
+
+	/** @param {string} region */
+	function getRegionLabel(region) {
+		/** @type {Record<string, string>} */
+		const labels = {
+			milano: 'Comune di Milano',
+			bormio: 'Comune di Bormio',
+			livigno: 'Comune di Livigno',
+			cortina: "Comune di Cortina d'Ampezzo",
+			anterselva: 'Comune di Rasun-Anterselva'
+		};
+
+		return labels[region] || 'Comune';
+	}
+
+	/** @param {string} region @param {{ x: number, y: number }} point */
+	function showRegionTooltip(region, point) {
+		if (!regionTooltip || !region || !point) return;
+
+		regionTooltip.textContent = getRegionLabel(region);
+		regionTooltip.style.left = `${point.x + 16}px`;
+		regionTooltip.style.top = `${point.y + 16}px`;
+		regionTooltip.classList.add('visible');
+		regionTooltip.setAttribute('aria-hidden', 'false');
+	}
+
+	function hideRegionTooltip() {
+		regionTooltip?.classList.remove('visible');
+		regionTooltip?.setAttribute('aria-hidden', 'true');
 	}
 
 	function updateFromScroll() {
@@ -446,6 +578,7 @@
 
 		if (window.scrollY < start) {
 			const introProgress = clamp(window.scrollY / Math.max(start, 1));
+			activeRouteRegion = '';
 			setIntroProgress(introProgress);
 
 			if (!mapReady || !map) return;
@@ -460,6 +593,14 @@
 
 		setIntroProgress(1);
 		setMapInteractivity(true);
+
+		if (activeRouteRegion) return;
+
+		if (focusSpace.offsetHeight < window.innerHeight * 0.25) {
+			hideAllMarkers();
+			jumpCamera(mapView);
+			return;
+		}
 
 		const progress = clamp((window.scrollY - start) / Math.max(end - start, 1));
 		const { view, region } = getFocusView(progress);
@@ -516,7 +657,7 @@
 
 				map = new mapboxgl.Map({
 					container: mapElement,
-					style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8/draft',
+					style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8',
 					center: landingView.center,
 					zoom: landingView.zoom,
 					pitch: landingView.pitch,
@@ -558,12 +699,17 @@
 								type: 'fill',
 								source: 'olympic-areas',
 								paint: {
-									'fill-color': '#0870ED',
+									'fill-color': [
+										'case',
+										['boolean', ['feature-state', 'hover'], false],
+										'#4BA3FF',
+										'#0870ED'
+									],
 									'fill-opacity': [
 										'case',
 										['boolean', ['feature-state', 'hover'], false],
-										0.26,
-										0.12
+										0.68,
+										0.5
 									]
 								}
 							},
@@ -576,19 +722,19 @@
 								type: 'line',
 								source: 'olympic-areas',
 								paint: {
-									'line-color': '#0870ED',
+									'line-color': [
+										'case',
+										['boolean', ['feature-state', 'hover'], false],
+										'#FFFFFF',
+										'#0870ED'
+									],
 									'line-width': [
 										'case',
 										['boolean', ['feature-state', 'hover'], false],
-										3.8,
-										2
+										4.2,
+										2.6
 									],
-									'line-opacity': [
-										'case',
-										['boolean', ['feature-state', 'hover'], false],
-										1,
-										0.85
-									]
+									'line-opacity': 1
 								}
 							},
 							firstLabelId
@@ -612,7 +758,11 @@
 							map.getCanvas().style.cursor = 'pointer';
 							if (!event.features?.length) return;
 
-							const featureId = event.features[0].id;
+							const feature = event.features[0];
+							const region = inferRegionFromFeature(feature, event.lngLat);
+							showRegionTooltip(region, event.point);
+
+							const featureId = feature.id;
 							if (featureId === undefined || featureId === null) return;
 
 							if (hoveredRegionFeatureId !== featureId) {
@@ -638,6 +788,7 @@
 						map.on('mouseleave', 'olympic-areas-fill', () => {
 							map.getCanvas().style.cursor = '';
 							clearHoveredRegion();
+							hideRegionTooltip();
 						});
 						map.on('click', 'olympic-areas-fill', handleAreaClick);
 
@@ -663,21 +814,38 @@
 							.map(/** @param {any} layer */ (layer) => String(layer.id));
 
 						studioRegionLayerIds.forEach((layerId) => {
-							const originalOpacity = map.getPaintProperty(layerId, 'fill-opacity');
+							try {
+								map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+								map.setPaintProperty(layerId, 'fill-opacity', 0.5);
+								map.moveLayer(layerId);
+							} catch (_) {
+								// Mapbox studio layers can vary between style versions.
+							}
 
-							map.on('mousemove', layerId, () => {
+							/** @param {any} event */
+							function handleStudioLayerMouseMove(event) {
 								map.getCanvas().style.cursor = 'pointer';
+								const feature = event.features?.[0];
+								const region = inferRegionFromFeature(feature, event.lngLat);
+								showRegionTooltip(region, event.point);
+
 								try {
-									map.setPaintProperty(layerId, 'fill-opacity', 0.28);
+									map.setPaintProperty(layerId, 'fill-color', '#4BA3FF');
+									map.setPaintProperty(layerId, 'fill-opacity', 0.68);
 								} catch (_) {
 									// Mapbox studio layers can vary between style versions.
 								}
-							});
+							}
+
+							map.on('mousemove', layerId, handleStudioLayerMouseMove);
 
 							map.on('mouseleave', layerId, () => {
 								map.getCanvas().style.cursor = '';
+								hideRegionTooltip();
+
 								try {
-									map.setPaintProperty(layerId, 'fill-opacity', originalOpacity ?? 0.14);
+									map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+									map.setPaintProperty(layerId, 'fill-opacity', 0.5);
 								} catch (_) {
 									// Mapbox studio layers can vary between style versions.
 								}
@@ -767,10 +935,17 @@
 
 	<div class="map-controls" aria-label="Controlli mappa">
 		<button class="map-ctrl-btn" type="button" title="Vista generale" aria-label="Vista generale" onclick={resetView}>
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-				<circle cx="12" cy="12" r="3" />
-				<path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
-				<path d="M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M12 2L4 21l8-4 8 4-8-19z" />
+				<path d="M12 2v15" />
+			</svg>
+		</button>
+
+		<button class="map-ctrl-btn route-btn" type="button" title="Inizio percorso" aria-label="Inizio percorso" onclick={goToNextRouteStep}>
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M5 19c4-9 10 1 14-10" />
+				<circle cx="5" cy="19" r="2" />
+				<circle cx="19" cy="9" r="2" />
 			</svg>
 		</button>
 
@@ -793,6 +968,7 @@
 	</div>
 
 	<div class="place-title" bind:this={placeTitle} aria-hidden="true"></div>
+	<div class="region-tooltip" bind:this={regionTooltip} aria-hidden="true"></div>
 
 	<div class="olympic-map__intro-space" bind:this={introSpace} aria-hidden="true"></div>
 	<div class="olympic-map__focus-space" bind:this={focusSpace} aria-hidden="true"></div>
@@ -803,7 +979,7 @@
 		--map-intro-progress: 0;
 
 		position: relative;
-		min-height: 540vh;
+		min-height: 240vh;
 		background: #080810;
 		color: #ffffff;
 	}
@@ -1010,7 +1186,7 @@
 	.olympic-map__focus-space {
 		position: relative;
 		z-index: -1;
-		height: 360vh;
+		height: 0;
 		pointer-events: none;
 	}
 
@@ -1058,6 +1234,43 @@
 		background: var(--colors-content-primary);
 		color: #ffffff;
 		transform: scale(1.08);
+	}
+
+	.route-btn {
+		position: relative;
+		margin-top: 8px;
+	}
+
+	.route-btn::after {
+		content: 'Inizio percorso';
+		position: absolute;
+		right: 56px;
+		top: 50%;
+		padding: 8px 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: var(--radius-full);
+		background: rgba(10, 10, 14, 0.88);
+		color: var(--colors-neutral-white);
+		font-family: var(--font-primary);
+		font-size: 0.72rem;
+		font-weight: var(--font-weight-bold);
+		line-height: var(--line-height-tight);
+		letter-spacing: var(--letter-spacing-wider);
+		white-space: nowrap;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(-50%) translateX(8px);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		transition:
+			opacity 0.22s ease,
+			transform 0.22s ease;
+	}
+
+	.route-btn:hover::after,
+	.route-btn:focus-visible::after {
+		opacity: 1;
+		transform: translateY(-50%) translateX(0);
 	}
 
 	.place-preview {
@@ -1111,6 +1324,39 @@
 		transition:
 			opacity 0.22s ease,
 			transform 0.22s ease;
+	}
+
+	.region-tooltip {
+		position: fixed;
+		z-index: 35;
+		padding: 9px 14px;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: var(--radius-full);
+		background: rgba(8, 8, 16, 0.9);
+		color: var(--colors-neutral-white);
+		font-family: var(--font-primary);
+		font-size: 0.78rem;
+		font-weight: var(--font-weight-bold);
+		line-height: var(--line-height-tight);
+		letter-spacing: var(--letter-spacing-wider);
+		text-transform: uppercase;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+		transform: translateY(8px);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		transition:
+			opacity 0.18s ease,
+			transform 0.18s ease,
+			visibility 0.18s ease;
+	}
+
+	.region-tooltip:global(.visible) {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
 	}
 
 	.olympic-map:global(.is-focus-region-active) .place-title:global(.visible) {

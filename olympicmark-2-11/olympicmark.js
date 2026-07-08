@@ -9,58 +9,82 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYWxlc3NpYXZhc2lsaXUiLCJhIjoiY21wZHNjM2dhMDlwa
 */
 
 const landingView = {
-  center: [11.2, 46.1],
+  center: [10.45, 46.1],
   zoom: 7.2,
-  pitch: 45,
-  bearing: -10
+  pitch: 34,
+  bearing: -8
 };
 
 const mapView = {
   center: [10.8, 46.0],
   zoom: 7.8,
-  pitch: 70,
-  bearing: -20
+  pitch: 32,
+  bearing: -10
 };
 
 const focusViews = {
   milano: {
     center: [9.175, 45.475],
     zoom: 10.15,
-    pitch: 48,
+    pitch: 30,
+    bearing: -12
+  },
+  bormio: {
+    center: [10.375, 46.470],
+    zoom: 10.15,
+    pitch: 30,
+    bearing: -12
+  },
+  livigno: {
+    center: [10.135, 46.535],
+    zoom: 10.15,
+    pitch: 30,
     bearing: -12
   },
   cortina: {
     center: [12.1357, 46.5404],
     zoom: 10.15,
-    pitch: 48,
+    pitch: 30,
     bearing: -12
   },
   anterselva: {
-    center: [12.035, 46.855],
+    center: [12.060, 46.890],
     zoom: 10.15,
-    pitch: 48,
+    pitch: 30,
     bearing: -12
   }
 };
 
 const transitViews = {
-  milanoToCortina: {
-    center: [10.65, 46.10],
-    zoom: 8.05,
-    pitch: 54,
+  milanoToBormio: {
+    center: [9.78, 45.96],
+    zoom: 8.35,
+    pitch: 30,
+    bearing: -16
+  },
+  bormioToLivigno: {
+    center: [10.25, 46.50],
+    zoom: 9.05,
+    pitch: 30,
+    bearing: -16
+  },
+  livignoToCortina: {
+    center: [11.10, 46.55],
+    zoom: 8.15,
+    pitch: 30,
     bearing: -16
   },
   cortinaToAnterselva: {
     center: [12.08, 46.69],
     zoom: 8.85,
-    pitch: 54,
+    pitch: 30,
     bearing: -16
   }
 };
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8/draft',
+  style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8',
   center: landingView.center,
   zoom: landingView.zoom,
   pitch: landingView.pitch,
@@ -103,11 +127,27 @@ const locations = [
     photo: 'images/rho.jpg'
   },
   {
+    id: 'nuova-cabinovia-bormio',
+    region: 'bormio',
+    name: 'Nuova Cabinovia Bormio',
+    subtitle: 'Bormio — collegamento sciistico',
+    coords: [10.3727, 46.4676],
+    photo: 'images/rho2.jpg'
+  },
+  {
+    id: 'bacino-innevamento-livigno',
+    region: 'livigno',
+    name: 'Bacino di innevamento Livigno',
+    subtitle: 'Livigno — infrastruttura neve',
+    coords: [10.1350, 46.5380],
+    photo: 'images/sb2.jpg'
+  },
+  {
     id: 'pista-bob-cortina',
     region: 'cortina',
     name: 'Pista da Bob Cortina',
     subtitle: "Cortina d'Ampezzo",
-    coords:  [12.135, 46.537],
+    coords: [12.135, 46.537],
     photo: 'images/pistadabob.jpg'
   },
   {
@@ -115,7 +155,7 @@ const locations = [
     region: 'anterselva',
     name: 'Anterselva Biathlon',
     subtitle: 'Alto Adige',
-    coords: [12.1696, 46.9300],
+    coords: [12.1696, 46.9080],
     photo: 'images/sb3.jpg'
   }
 ];
@@ -189,50 +229,61 @@ function updateMapCamera(progress) {
 function getFocusView(progress) {
   const p = clamp(progress);
 
-  if (p < 0.20) {
+  if (p < 0.12) {
     return {
-      view: interpolateView(mapView, focusViews.milano, p / 0.20),
+      view: interpolateView(mapView, focusViews.milano, p / 0.12),
       region: null
     };
   }
+  if (p < 0.22) return { view: focusViews.milano, region: 'milano' };
 
-  if (p < 0.34) {
-    return { view: focusViews.milano, region: 'milano' };
-  }
-
-  if (p < 0.48) {
+  if (p < 0.32) {
     return {
-      view: interpolateView(focusViews.milano, transitViews.milanoToCortina, (p - 0.34) / 0.14),
+      view: interpolateView(focusViews.milano, transitViews.milanoToBormio, (p - 0.22) / 0.10),
       region: null
     };
   }
+  if (p < 0.42) {
+    return {
+      view: interpolateView(transitViews.milanoToBormio, focusViews.bormio, (p - 0.32) / 0.10),
+      region: null
+    };
+  }
+  if (p < 0.50) return { view: focusViews.bormio, region: 'bormio' };
 
   if (p < 0.60) {
     return {
-      view: interpolateView(transitViews.milanoToCortina, focusViews.cortina, (p - 0.48) / 0.12),
+      view: interpolateView(focusViews.bormio, transitViews.bormioToLivigno, (p - 0.50) / 0.10),
       region: null
     };
   }
+  if (p < 0.68) return { view: focusViews.livigno, region: 'livigno' };
 
-  if (p < 0.72) {
-    return { view: focusViews.cortina, region: 'cortina' };
-  }
-
-  if (p < 0.81) {
+  if (p < 0.77) {
     return {
-      view: interpolateView(focusViews.cortina, transitViews.cortinaToAnterselva, (p - 0.72) / 0.09),
+      view: interpolateView(focusViews.livigno, transitViews.livignoToCortina, (p - 0.68) / 0.09),
       region: null
     };
   }
-
-  if (p < 0.92) {
+  if (p < 0.84) {
     return {
-      view: interpolateView(transitViews.cortinaToAnterselva, focusViews.anterselva, (p - 0.81) / 0.11),
+      view: interpolateView(transitViews.livignoToCortina, focusViews.cortina, (p - 0.77) / 0.07),
+      region: null
+    };
+  }
+  if (p < 0.89) return { view: focusViews.cortina, region: 'cortina' };
+
+  if (p < 0.96) {
+    return {
+      view: interpolateView(focusViews.cortina, transitViews.cortinaToAnterselva, (p - 0.89) / 0.07),
       region: null
     };
   }
 
-  return { view: focusViews.anterselva, region: 'anterselva' };
+  return {
+    view: interpolateView(transitViews.cortinaToAnterselva, focusViews.anterselva, (p - 0.96) / 0.04),
+    region: 'anterselva'
+  };
 }
 
 function getRegionScrollTop(region) {
@@ -243,9 +294,11 @@ function getRegionScrollTop(region) {
   const height = Math.max(focusSpace.offsetHeight - window.innerHeight, 1);
 
   const progressByRegion = {
-    milano: 0.28,
-    cortina: 0.66,
-    anterselva: 0.97
+    milano: 0.18,
+    bormio: 0.46,
+    livigno: 0.66,
+    cortina: 0.86,
+    anterselva: 0.99
   };
 
   return start + height * (progressByRegion[region] ?? 0.30);
@@ -273,6 +326,8 @@ function inferRegionFromFeature(feature, lngLat = null) {
   ].filter(Boolean).join(' ').toLowerCase();
 
   if (rawName.includes('milano') || rawName.includes('milan')) return 'milano';
+  if (rawName.includes('bormio')) return 'bormio';
+  if (rawName.includes('livigno')) return 'livigno';
   if (rawName.includes('cortina')) return 'cortina';
   if (
     rawName.includes('rasun') ||
@@ -286,11 +341,42 @@ function inferRegionFromFeature(feature, lngLat = null) {
     const lat = lngLat.lat;
 
     if (lng > 8.85 && lng < 9.45 && lat > 45.30 && lat < 45.65) return 'milano';
+    if (lng > 10.20 && lng < 10.55 && lat > 46.35 && lat < 46.60) return 'bormio';
+    if (lng > 9.95 && lng < 10.35 && lat > 46.45 && lat < 46.70) return 'livigno';
     if (lng > 11.85 && lng < 12.45 && lat > 46.35 && lat < 46.75) return 'cortina';
     if (lng > 11.85 && lng < 12.45 && lat > 46.75 && lat < 47.05) return 'anterselva';
   }
 
   return null;
+}
+
+function getRegionLabel(region) {
+  const labels = {
+    milano: 'Comune di Milano',
+    bormio: 'Comune di Bormio',
+    livigno: 'Comune di Livigno',
+    cortina: "Comune di Cortina d\'Ampezzo",
+    anterselva: 'Comune di Rasun-Anterselva'
+  };
+  return labels[region] || 'Comune';
+}
+
+function showRegionTooltip(region, point) {
+  const tooltip = document.getElementById('regionTooltip');
+  if (!tooltip || !region || !point) return;
+
+  tooltip.textContent = getRegionLabel(region);
+  tooltip.style.left = `${point.x + 16}px`;
+  tooltip.style.top = `${point.y + 16}px`;
+  tooltip.classList.add('visible');
+  tooltip.setAttribute('aria-hidden', 'false');
+}
+
+function hideRegionTooltip() {
+  const tooltip = document.getElementById('regionTooltip');
+  if (!tooltip) return;
+  tooltip.classList.remove('visible');
+  tooltip.setAttribute('aria-hidden', 'true');
 }
 
 function setVisibleRegion(region) {
@@ -423,12 +509,17 @@ map.on('load', () => {
       type: 'fill',
       source: 'olympic-areas',
       paint: {
-        'fill-color': '#0870ED',
+        'fill-color': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          '#4BA3FF',
+          '#0870ED'
+        ],
         'fill-opacity': [
           'case',
           ['boolean', ['feature-state', 'hover'], false],
-          0.26,
-          0.12
+          0.68,
+          0.50
         ]
       }
     }, firstLabelId);
@@ -438,19 +529,19 @@ map.on('load', () => {
       type: 'line',
       source: 'olympic-areas',
       paint: {
-        'line-color': '#0870ED',
+        'line-color': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          '#FFFFFF',
+          '#0870ED'
+        ],
         'line-width': [
           'case',
           ['boolean', ['feature-state', 'hover'], false],
-          3.8,
-          2
+          4.2,
+          2.6
         ],
-        'line-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.85
-        ]
+        'line-opacity': 1
       }
     }, firstLabelId);
 
@@ -476,7 +567,11 @@ map.on('load', () => {
       map.getCanvas().style.cursor = 'pointer';
       if (!e.features || !e.features.length) return;
 
-      const featureId = e.features[0].id;
+      const feature = e.features[0];
+      const region = inferRegionFromFeature(feature, e.lngLat);
+      showRegionTooltip(region, e.point);
+
+      const featureId = feature.id;
       if (featureId === undefined || featureId === null) return;
 
       if (hoveredRegionFeatureId !== featureId) {
@@ -492,6 +587,7 @@ map.on('load', () => {
     map.on('mouseleave', 'olympic-areas-fill', () => {
       map.getCanvas().style.cursor = '';
       clearHoveredRegion();
+      hideRegionTooltip();
     });
 
     map.on('click', 'olympic-areas-fill', (e) => {
@@ -510,16 +606,30 @@ map.on('load', () => {
       .map(layer => layer.id);
 
     studioRegionLayerIds.forEach(layerId => {
-      let originalOpacity = map.getPaintProperty(layerId, 'fill-opacity');
+      try {
+        map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+        map.setPaintProperty(layerId, 'fill-opacity', 0.50);
+        map.moveLayer(layerId);
+      } catch (_) {}
 
-      map.on('mousemove', layerId, () => {
+      map.on('mousemove', layerId, (e) => {
         map.getCanvas().style.cursor = 'pointer';
-        try { map.setPaintProperty(layerId, 'fill-opacity', 0.28); } catch (_) {}
+        const feature = e.features && e.features[0];
+        const region = inferRegionFromFeature(feature, e.lngLat);
+        showRegionTooltip(region, e.point);
+        try {
+          map.setPaintProperty(layerId, 'fill-color', '#4BA3FF');
+          map.setPaintProperty(layerId, 'fill-opacity', 0.68);
+        } catch (_) {}
       });
 
       map.on('mouseleave', layerId, () => {
         map.getCanvas().style.cursor = '';
-        try { map.setPaintProperty(layerId, 'fill-opacity', originalOpacity ?? 0.14); } catch (_) {}
+        hideRegionTooltip();
+        try {
+          map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+          map.setPaintProperty(layerId, 'fill-opacity', 0.50);
+        } catch (_) {}
       });
 
       map.on('click', layerId, (e) => {
@@ -579,6 +689,35 @@ document.getElementById('resetBtn').addEventListener('click', resetView);
 document.getElementById('photoClose').addEventListener('click', () => {
   document.getElementById('photoModal').classList.remove('open');
 });
+
+const routeSequence = ['milano', 'bormio', 'livigno', 'cortina', 'anterselva'];
+let routeIndex = -1;
+
+function goToRouteStep(region) {
+  const view = focusViews[region];
+  if (!view) return;
+
+  hidePlacePreview();
+  document.body.classList.add('map-active');
+  setMapInteractivity(true);
+  setVisibleRegion(region);
+
+  map.flyTo({
+    ...view,
+    duration: 1800,
+    curve: 1.25,
+    speed: 0.7,
+    essential: true
+  });
+}
+
+const routeBtn = document.getElementById('routeBtn');
+if (routeBtn) {
+  routeBtn.addEventListener('click', () => {
+    routeIndex = (routeIndex + 1) % routeSequence.length;
+    goToRouteStep(routeSequence[routeIndex]);
+  });
+}
 
 document.getElementById('zoomInBtn').addEventListener('click', () => {
   map.zoomIn({ duration: 400 });
@@ -730,19 +869,16 @@ const tl = gsap.timeline({
   }
 });
 
-tl.to(title, {
-  x: () => titleMotion.x,
-  y: () => titleMotion.y,
-  scale: () => titleMotion.scale,
-  color: '#0870ED',
-  letterSpacing: '-1px',
-  ease: 'power2.inOut',
+tl.to('.hero-content', {
+  x: '-110vw',
+  autoAlpha: 0,
+  ease: 'power3.inOut',
   duration: 1
 }, 0);
 
 tl.to(fadingEls, {
   autoAlpha: 0,
-  y: -18,
+  x: -80,
   ease: 'power2.out',
   duration: 0.45,
   stagger: 0.03
@@ -771,29 +907,6 @@ ScrollTrigger.addEventListener('refresh', () => {
 });
 
 /* ─────────────────────────────────────────────
-   NUOVE TAPPE DI SCROLL: Milano → Cortina → Anterselva.
-   Scrub leggermente più morbido per eliminare i micro-scatti
-   percepibili nei passaggi tra una regione e l'altra.
+   PERCORSO TRA LE AREE
+   Disattivato dallo scroll: il percorso parte dal pulsante "Inizio percorso".
 ───────────────────────────────────────────── */
-ScrollTrigger.create({
-  trigger: '.focus-space',
-  start: 'top top',
-  end: 'bottom bottom',
-  scrub: 0.9,
-  onUpdate: self => {
-    if (!mapReady) return;
-
-    document.body.classList.add('map-active');
-    setMapInteractivity(true);
-
-    const { view, region } = getFocusView(self.progress);
-    jumpCamera(view);
-
-    setVisibleRegion(region);
-    if (!region) hidePlacePreview();
-  },
-  onLeaveBack: () => {
-    hideAllMarkers();
-    jumpCamera(mapView);
-  }
-});
