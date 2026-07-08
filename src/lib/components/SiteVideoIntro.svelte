@@ -24,9 +24,7 @@
 		}
 
 		fallbackTimer = window.setTimeout(closeIntro, fallbackDuration);
-		videoElement?.play().catch(() => {
-			closeIntro();
-		});
+		playIntroVideo();
 
 		return () => {
 			if (fallbackTimer) window.clearTimeout(fallbackTimer);
@@ -44,6 +42,13 @@
 			isVisible = false;
 		}, 520);
 	}
+
+	function playIntroVideo() {
+		videoElement?.play().catch(() => {
+			// Some mobile/preview browsers delay autoplay; keep the intro visible
+			// and let the fallback timer close it instead of skipping it instantly.
+		});
+	}
 </script>
 
 {#if isVisible}
@@ -53,8 +58,11 @@
 			class="site-video-intro__video"
 			src={src}
 			muted
+			autoplay
 			playsinline
 			preload="auto"
+			onloadeddata={playIntroVideo}
+			oncanplay={playIntroVideo}
 			onended={closeIntro}
 			onerror={closeIntro}
 		></video>

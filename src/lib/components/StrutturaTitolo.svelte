@@ -7,6 +7,7 @@
 	let { title = '', city = '', href = '' } = $props();
 	let prefixText = $derived(city ? `${city} /` : '');
 	let typewriterDuration = $derived(Math.min(Math.max(city.length * 88, 720), 1320));
+	let titleFitRatio = $derived(Math.max(title.length * 0.58, 1));
 
 	$effect(() => {
 		if (prefixMeasure) prefixWidth = prefixMeasure.scrollWidth;
@@ -32,7 +33,7 @@
 	<h2
 		class="struttura-titolo__text"
 		class:is-active={hovered}
-		style={`--prefix-width: ${prefixWidth}px; --typewriter-duration: ${typewriterDuration}ms;`}
+		style={`--prefix-width: ${prefixWidth}px; --typewriter-duration: ${typewriterDuration}ms; --title-fit-ratio: ${titleFitRatio};`}
 	>
 		{#if city}
 			<span
@@ -65,7 +66,10 @@
 		position: relative;
 		margin: 0;
 		font-family: var(--font-primary);
-		font-size: clamp(72px, 8.4vw, var(--font-size-hero));
+		font-size: min(
+			clamp(72px, 8.4vw, var(--font-size-hero)),
+			calc((100vw - (var(--spacing-6) * 2)) / var(--title-fit-ratio))
+		);
 		font-weight: var(--font-weight-black);
 		line-height: var(--line-height-tight);
 		letter-spacing: var(--letter-spacing-wide);
@@ -110,7 +114,7 @@
 		display: inline-block;
 		color: var(--colors-content-primary);
 		max-width: 100%;
-		overflow-wrap: anywhere;
+		white-space: nowrap;
 		transform: translateX(0);
 		transition: transform var(--typewriter-duration) linear;
 	}
@@ -121,7 +125,10 @@
 
 	@media (max-width: 1024px) {
 		.struttura-titolo__text {
-			font-size: clamp(58px, 9vw, 96px);
+			font-size: min(
+				clamp(42px, 7.2vw, 96px),
+				calc((100vw - (var(--spacing-5) * 2)) / var(--title-fit-ratio))
+			);
 		}
 	}
 
@@ -131,8 +138,20 @@
 		}
 
 		.struttura-titolo__text {
-			font-size: clamp(40px, 12.8vw, var(--font-size-display-lg));
-			white-space: normal;
+			font-size: min(
+				clamp(22px, 7.2vw, var(--font-size-display-lg)),
+				calc((100vw - 40px) / var(--title-fit-ratio))
+			);
+			white-space: nowrap;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.struttura-titolo__text {
+			font-size: min(
+				clamp(20px, 7.2vw, 34px),
+				calc((100vw - 32px) / var(--title-fit-ratio))
+			);
 		}
 	}
 
