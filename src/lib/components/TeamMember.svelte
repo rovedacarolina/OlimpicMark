@@ -45,9 +45,9 @@
 		align-self: start;
 		justify-self: end;
 		aspect-ratio: 1;
-		overflow: hidden;
-		border-radius: var(--radius-xs);
-		background: var(--colors-background-primary);
+		overflow: visible;
+		border-radius: 0;
+		background: transparent;
 	}
 
 	.team-member__portrait {
@@ -56,6 +56,7 @@
 		display: block;
 		object-fit: contain;
 		object-position: center;
+		mix-blend-mode: screen;
 		filter: grayscale(1) saturate(0) brightness(1.04) contrast(1.08);
 		opacity: 0.82;
 		transform: scale(1.01);

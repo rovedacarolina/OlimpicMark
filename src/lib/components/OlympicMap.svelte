@@ -250,6 +250,16 @@
 		rootElement?.classList.toggle('is-intro-complete', p > 0.98);
 	}
 
+	function getScrollIntroProgress() {
+		if (!rootElement) return 0;
+
+		const sectionTop = rootElement.getBoundingClientRect().top;
+		const scrolledInsideMap = Math.max(-sectionTop, 0);
+		const fadeDistance = Math.max(window.innerHeight * 0.9, 1);
+
+		return clamp(scrolledInsideMap / fadeDistance);
+	}
+
 	function getOverviewScrollTop() {
 		const focusStart = focusSpace?.offsetTop ?? (introSpace?.offsetHeight || window.innerHeight * 1.35);
 		return Math.max(focusStart - 1, 0);
@@ -571,35 +581,23 @@
 
 	function updateFromScroll() {
 		frameRequested = false;
-		if (!focusSpace) return;
-
-		const start = focusSpace.offsetTop;
-		const end = start + Math.max(focusSpace.offsetHeight - window.innerHeight, 1);
-
-		if (window.scrollY < start) {
-			const introProgress = clamp(window.scrollY / Math.max(start, 1));
-			activeRouteRegion = '';
-			setIntroProgress(introProgress);
-
-			if (!mapReady || !map) return;
-
-			setMapInteractivity(introProgress > 0.82);
-			hideAllMarkers();
-			return;
-		}
+		const introProgress = getScrollIntroProgress();
+		setIntroProgress(introProgress);
 
 		if (!mapReady || !map) return;
 
-		setIntroProgress(1);
-		setMapInteractivity(true);
+		setMapInteractivity(introProgress > 0.82);
 
-		if (activeRouteRegion) return;
-
-		if (focusSpace.offsetHeight < window.innerHeight * 0.25) {
+		if (introProgress < 0.98) {
+			activeRouteRegion = '';
 			hideAllMarkers();
 			return;
 		}
 
+		if (activeRouteRegion || !focusSpace || focusSpace.offsetHeight < window.innerHeight * 0.25) return;
+
+		const start = focusSpace.offsetTop;
+		const end = start + Math.max(focusSpace.offsetHeight - window.innerHeight, 1);
 		const progress = clamp((window.scrollY - start) / Math.max(end - start, 1));
 		const { view, region } = getFocusView(progress);
 		jumpCamera(view);
@@ -1040,8 +1038,12 @@
 		max-width: 500px;
 		pointer-events: none;
 		opacity: calc(1 - var(--map-intro-progress));
+		visibility: visible;
 		transform: translateY(-50%);
-		animation: map-hero-enter 0.9s ease;
+		will-change: opacity;
+		transition:
+			opacity 0.08s linear,
+			visibility 0s linear 0.08s;
 	}
 
 	.olympic-map__hero-label {
@@ -1143,16 +1145,9 @@
 		pointer-events: none;
 	}
 
-	@keyframes map-hero-enter {
-		from {
-			opacity: 0;
-			transform: translateY(-50%);
-		}
-
-		to {
-			opacity: 1;
-			transform: translateY(-50%);
-		}
+	.olympic-map:global(.is-intro-complete) .olympic-map__hero {
+		opacity: 0;
+		visibility: hidden;
 	}
 
 	.olympic-map__status {
