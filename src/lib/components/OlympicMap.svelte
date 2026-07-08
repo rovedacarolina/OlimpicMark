@@ -113,7 +113,7 @@
 			id: 'nuova-cabinovia-bormio',
 			region: 'bormio',
 			name: 'Nuova Cabinovia Bormio',
-			coords: [10.3727, 46.4676],
+			coords: [10.376, 46.4668],
 			photo: '/olympicmark-2-11/images/rho2.jpg',
 			href: '/cabinovia'
 		},
@@ -121,7 +121,7 @@
 			id: 'bacino-innevamento-livigno',
 			region: 'livigno',
 			name: 'Bacino di innevamento Livigno',
-			coords: [10.135, 46.538],
+			coords: [10.141, 46.538],
 			photo: '/olympicmark-2-11/images/sb2.jpg',
 			href: '/innevamento'
 		},
@@ -137,7 +137,7 @@
 			id: 'anterselva-biathlon',
 			region: 'anterselva',
 			name: 'Anterselva Biathlon',
-			coords: [12.1696, 46.908],
+			coords: [12.165, 46.889],
 			photo: '/olympicmark-2-11/images/sb3.jpg',
 			href: '/biathlon'
 		}
@@ -585,7 +585,6 @@
 
 			setMapInteractivity(introProgress > 0.82);
 			hideAllMarkers();
-			jumpCamera(getIntroView(introProgress));
 			return;
 		}
 
@@ -598,7 +597,6 @@
 
 		if (focusSpace.offsetHeight < window.innerHeight * 0.25) {
 			hideAllMarkers();
-			jumpCamera(mapView);
 			return;
 		}
 
@@ -658,10 +656,10 @@
 				map = new mapboxgl.Map({
 					container: mapElement,
 					style: 'mapbox://styles/alessiavasiliu/cmr0dpf74000201si6i01hhi8',
-					center: landingView.center,
-					zoom: landingView.zoom,
-					pitch: landingView.pitch,
-					bearing: landingView.bearing,
+					center: mapView.center,
+					zoom: mapView.zoom,
+					pitch: mapView.pitch,
+					bearing: mapView.bearing,
 					antialias: true,
 					minZoom: 6.8,
 					maxZoom: 15,
@@ -702,14 +700,14 @@
 									'fill-color': [
 										'case',
 										['boolean', ['feature-state', 'hover'], false],
-										'#4BA3FF',
+										'#0870ED',
 										'#0870ED'
 									],
 									'fill-opacity': [
 										'case',
 										['boolean', ['feature-state', 'hover'], false],
-										0.68,
-										0.5
+										0.95,
+										0.72
 									]
 								}
 							},
@@ -816,7 +814,7 @@
 						studioRegionLayerIds.forEach((layerId) => {
 							try {
 								map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-								map.setPaintProperty(layerId, 'fill-opacity', 0.5);
+								map.setPaintProperty(layerId, 'fill-opacity', 0.72);
 								map.moveLayer(layerId);
 							} catch (_) {
 								// Mapbox studio layers can vary between style versions.
@@ -830,8 +828,8 @@
 								showRegionTooltip(region, event.point);
 
 								try {
-									map.setPaintProperty(layerId, 'fill-color', '#4BA3FF');
-									map.setPaintProperty(layerId, 'fill-opacity', 0.68);
+									map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+									map.setPaintProperty(layerId, 'fill-opacity', 0.95);
 								} catch (_) {
 									// Mapbox studio layers can vary between style versions.
 								}
@@ -845,7 +843,7 @@
 
 								try {
 									map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-									map.setPaintProperty(layerId, 'fill-opacity', 0.5);
+									map.setPaintProperty(layerId, 'fill-opacity', 0.72);
 								} catch (_) {
 									// Mapbox studio layers can vary between style versions.
 								}

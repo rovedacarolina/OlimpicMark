@@ -134,7 +134,7 @@ const locations = [
     region: 'bormio',
     name: 'Nuova Cabinovia Bormio',
     subtitle: 'Bormio — collegamento sciistico',
-    coords: [10.3727, 46.4676],
+    coords: [10.3760, 46.4668],
     photo: 'images/rho2.jpg',
     href: '/cabinovia'
   },
@@ -143,7 +143,7 @@ const locations = [
     region: 'livigno',
     name: 'Bacino di innevamento Livigno',
     subtitle: 'Livigno — infrastruttura neve',
-    coords: [10.1350, 46.5380],
+    coords: [10.1410, 46.5380],
     photo: 'images/sb2.jpg',
     href: '/innevamento'
   },
@@ -161,7 +161,7 @@ const locations = [
     region: 'anterselva',
     name: 'Anterselva Biathlon',
     subtitle: 'Alto Adige',
-    coords: [12.1696, 46.9080],
+    coords: [12.1650, 46.8890],
     photo: 'images/sb3.jpg',
     href: '/biathlon'
   }
@@ -519,14 +519,14 @@ map.on('load', () => {
         'fill-color': [
           'case',
           ['boolean', ['feature-state', 'hover'], false],
-          '#4BA3FF',
+          '#0870ED',
           '#0870ED'
         ],
         'fill-opacity': [
           'case',
           ['boolean', ['feature-state', 'hover'], false],
-          0.68,
-          0.50
+          0.95,
+          0.72
         ]
       }
     }, firstLabelId);
@@ -615,7 +615,7 @@ map.on('load', () => {
     studioRegionLayerIds.forEach(layerId => {
       try {
         map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-        map.setPaintProperty(layerId, 'fill-opacity', 0.50);
+        map.setPaintProperty(layerId, 'fill-opacity', 0.72);
         map.moveLayer(layerId);
       } catch (_) {}
 
@@ -625,8 +625,8 @@ map.on('load', () => {
         const region = inferRegionFromFeature(feature, e.lngLat);
         showRegionTooltip(region, e.point);
         try {
-          map.setPaintProperty(layerId, 'fill-color', '#4BA3FF');
-          map.setPaintProperty(layerId, 'fill-opacity', 0.68);
+          map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+          map.setPaintProperty(layerId, 'fill-opacity', 0.95);
         } catch (_) {}
       });
 
@@ -635,7 +635,7 @@ map.on('load', () => {
         hideRegionTooltip();
         try {
           map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-          map.setPaintProperty(layerId, 'fill-opacity', 0.50);
+          map.setPaintProperty(layerId, 'fill-opacity', 0.72);
         } catch (_) {}
       });
 
