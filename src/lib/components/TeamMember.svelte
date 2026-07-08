@@ -11,7 +11,9 @@
 	</div>
 
 	<div class="team-member__content">
-		<h2 class="team-member__name">{name}</h2>
+		<h2 class="team-member__name" class:is-long-name={name === 'Madalena de Gusmão'}>
+			{name}
+		</h2>
 		<ul class="team-member__roles" aria-label="Ruoli">
 			{#each roles as role}
 				<li>{role}</li>
@@ -92,6 +94,11 @@
 			text-shadow 0.3s ease;
 	}
 
+	.team-member__name.is-long-name {
+		font-size: clamp(30px, 3.35vw, 56px);
+		white-space: nowrap;
+	}
+
 	.team-member:hover .team-member__name {
 		color: var(--colors-content-primary);
 		text-shadow: 0 0 24px rgba(var(--colors-content-primary-rgb), 0.26);
@@ -155,6 +162,10 @@
 
 		.team-member__name {
 			font-size: clamp(32px, 10vw, 52px);
+		}
+
+		.team-member__name.is-long-name {
+			font-size: clamp(26px, 7.3vw, 38px);
 		}
 
 		.team-member__roles {

@@ -677,186 +677,91 @@
 					setMapInteractivity(false);
 					hideAllMarkers();
 
-					if (!map.getSource('olympic-areas')) {
-						map.addSource('olympic-areas', {
-							type: 'geojson',
-							data: '/olympicmark-2-11/data/olympic-areas.geojson',
-							generateId: true
-						});
+					/** @param {string} region */
+					function handleRegionClick(region) {
+						if (!region) return;
+						hidePlacePreview();
+						scrollToRegion(region);
+					}
 
-						const firstLabelId = map.getStyle().layers.find(
+					/** @type {string[]} */
+					const studioRegionLayerIds = map
+						.getStyle()
+						.layers.filter(
 							/** @param {any} layer */
-							(layer) => layer.type === 'symbol' && layer.layout && layer.layout['text-field']
-						)?.id;
+							(layer) => {
+								if (layer.type !== 'fill') return false;
 
-						map.addLayer(
-							{
-								id: 'olympic-areas-fill',
-								type: 'fill',
-								source: 'olympic-areas',
-								paint: {
-									'fill-color': [
-										'case',
-										['boolean', ['feature-state', 'hover'], false],
-										'#0870ED',
-										'#0870ED'
-									],
-									'fill-opacity': [
-										'case',
-										['boolean', ['feature-state', 'hover'], false],
-										0.95,
-										0.72
-									]
-								}
-							},
-							firstLabelId
-						);
+								const layerSignature = [
+									layer.id,
+									layer.source,
+									layer['source-layer']
+								]
+									.filter(Boolean)
+									.join(' ')
+									.toLowerCase();
 
-						map.addLayer(
-							{
-								id: 'olympic-areas-line',
-								type: 'line',
-								source: 'olympic-areas',
-								paint: {
-									'line-color': [
-										'case',
-										['boolean', ['feature-state', 'hover'], false],
-										'#FFFFFF',
-										'#0870ED'
-									],
-									'line-width': [
-										'case',
-										['boolean', ['feature-state', 'hover'], false],
-										4.2,
-										2.6
-									],
-									'line-opacity': 1
-								}
-							},
-							firstLabelId
-						);
+								return [
+									'alessiavasiliu',
+									'export',
+									'olympic',
+									'milano',
+									'bormio',
+									'livigno',
+									'cortina',
+									'anterselva',
+									'rasun'
+								].some((term) => layerSignature.includes(term));
+							}
+						)
+						.map(/** @param {any} layer */ (layer) => String(layer.id));
 
-						/** @type {number | string | null} */
-						let hoveredRegionFeatureId = null;
-
-						function clearHoveredRegion() {
-							if (hoveredRegionFeatureId === null || !map.getSource('olympic-areas')) return;
-
-							map.setFeatureState(
-								{ source: 'olympic-areas', id: hoveredRegionFeatureId },
-								{ hover: false }
-							);
-							hoveredRegionFeatureId = null;
+					studioRegionLayerIds.forEach((layerId) => {
+						try {
+							map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+							map.setPaintProperty(layerId, 'fill-opacity', 0.72);
+						} catch (_) {
+							// Mapbox studio layers can vary between style versions.
 						}
 
 						/** @param {any} event */
-						function handleAreaMouseMove(event) {
+						function handleStudioLayerMouseMove(event) {
 							map.getCanvas().style.cursor = 'pointer';
-							if (!event.features?.length) return;
-
-							const feature = event.features[0];
+							const feature = event.features?.[0];
 							const region = inferRegionFromFeature(feature, event.lngLat);
 							showRegionTooltip(region, event.point);
 
-							const featureId = feature.id;
-							if (featureId === undefined || featureId === null) return;
-
-							if (hoveredRegionFeatureId !== featureId) {
-								clearHoveredRegion();
-								hoveredRegionFeatureId = featureId;
-								map.setFeatureState(
-									{ source: 'olympic-areas', id: hoveredRegionFeatureId },
-									{ hover: true }
-								);
-							}
-						}
-
-						/** @param {any} event */
-						function handleAreaClick(event) {
-							if (!event.features?.length) return;
-							const region = inferRegionFromFeature(event.features[0], event.lngLat);
-							if (!region) return;
-							hidePlacePreview();
-							scrollToRegion(region);
-						}
-
-						map.on('mousemove', 'olympic-areas-fill', handleAreaMouseMove);
-						map.on('mouseleave', 'olympic-areas-fill', () => {
-							map.getCanvas().style.cursor = '';
-							clearHoveredRegion();
-							hideRegionTooltip();
-						});
-						map.on('click', 'olympic-areas-fill', handleAreaClick);
-
-						/** @type {string[]} */
-						const studioRegionLayerIds = map
-							.getStyle()
-							.layers.filter(
-								/** @param {any} layer */
-								(layer) => {
-									if (layer.id === 'olympic-areas-fill' || layer.id === 'olympic-areas-line') {
-										return false;
-									}
-									if (layer.type !== 'fill') return false;
-
-									const sourceName = String(layer.source || '').toLowerCase();
-									return (
-										sourceName.includes('alessiavasiliu') ||
-										sourceName.includes('export') ||
-										sourceName.includes('olympic')
-									);
-								}
-							)
-							.map(/** @param {any} layer */ (layer) => String(layer.id));
-
-						studioRegionLayerIds.forEach((layerId) => {
 							try {
 								map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-								map.setPaintProperty(layerId, 'fill-opacity', 0.72);
-								map.moveLayer(layerId);
+								map.setPaintProperty(layerId, 'fill-opacity', 0.95);
 							} catch (_) {
 								// Mapbox studio layers can vary between style versions.
 							}
+						}
 
-							/** @param {any} event */
-							function handleStudioLayerMouseMove(event) {
-								map.getCanvas().style.cursor = 'pointer';
-								const feature = event.features?.[0];
-								const region = inferRegionFromFeature(feature, event.lngLat);
-								showRegionTooltip(region, event.point);
+						map.on('mousemove', layerId, handleStudioLayerMouseMove);
 
-								try {
-									map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-									map.setPaintProperty(layerId, 'fill-opacity', 0.95);
-								} catch (_) {
-									// Mapbox studio layers can vary between style versions.
-								}
+						map.on('mouseleave', layerId, () => {
+							map.getCanvas().style.cursor = '';
+							hideRegionTooltip();
+
+							try {
+								map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+								map.setPaintProperty(layerId, 'fill-opacity', 0.72);
+							} catch (_) {
+								// Mapbox studio layers can vary between style versions.
 							}
-
-							map.on('mousemove', layerId, handleStudioLayerMouseMove);
-
-							map.on('mouseleave', layerId, () => {
-								map.getCanvas().style.cursor = '';
-								hideRegionTooltip();
-
-								try {
-									map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-									map.setPaintProperty(layerId, 'fill-opacity', 0.72);
-								} catch (_) {
-									// Mapbox studio layers can vary between style versions.
-								}
-							});
-
-							/** @param {any} event */
-							function handleStudioLayerClick(event) {
-								if (!event.features?.length) return;
-								const region = inferRegionFromFeature(event.features[0], event.lngLat);
-								if (region) scrollToRegion(region);
-							}
-
-							map.on('click', layerId, handleStudioLayerClick);
 						});
-					}
+
+						/** @param {any} event */
+						function handleStudioLayerClick(event) {
+							if (!event.features?.length) return;
+							const region = inferRegionFromFeature(event.features[0], event.lngLat);
+							handleRegionClick(region);
+						}
+
+						map.on('click', layerId, handleStudioLayerClick);
+					});
 
 					locations.forEach((location) => {
 						const el = createMarkerElement(location);

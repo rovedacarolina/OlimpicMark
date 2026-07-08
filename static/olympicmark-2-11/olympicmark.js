@@ -500,152 +500,68 @@ map.on('load', () => {
   setMapInteractivity(false);
   hideAllMarkers();
 
-  if (!map.getSource('olympic-areas')) {
-    map.addSource('olympic-areas', {
-      type: 'geojson',
-      data: 'data/olympic-areas.geojson',
-      generateId: true
-    });
+  function handleRegionClick(region) {
+    if (!region) return;
+    hidePlacePreview();
+    scrollToRegion(region);
+  }
 
-    const firstLabelId = map.getStyle().layers.find(
-      l => l.type === 'symbol' && l.layout && l.layout['text-field']
-    )?.id;
+  const studioRegionLayerIds = map.getStyle().layers
+    .filter(layer => {
+      if (layer.type !== 'fill') return false;
 
-    map.addLayer({
-      id: 'olympic-areas-fill',
-      type: 'fill',
-      source: 'olympic-areas',
-      paint: {
-        'fill-color': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          '#0870ED',
-          '#0870ED'
-        ],
-        'fill-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          0.95,
-          0.72
-        ]
-      }
-    }, firstLabelId);
+      const layerSignature = [
+        layer.id,
+        layer.source,
+        layer['source-layer']
+      ].filter(Boolean).join(' ').toLowerCase();
 
-    map.addLayer({
-      id: 'olympic-areas-line',
-      type: 'line',
-      source: 'olympic-areas',
-      paint: {
-        'line-color': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          '#FFFFFF',
-          '#0870ED'
-        ],
-        'line-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          4.2,
-          2.6
-        ],
-        'line-opacity': 1
-      }
-    }, firstLabelId);
+      return [
+        'alessiavasiliu',
+        'export',
+        'olympic',
+        'milano',
+        'bormio',
+        'livigno',
+        'cortina',
+        'anterselva',
+        'rasun'
+      ].some(term => layerSignature.includes(term));
+    })
+    .map(layer => layer.id);
 
-    let hoveredRegionFeatureId = null;
+  studioRegionLayerIds.forEach(layerId => {
+    try {
+      map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+      map.setPaintProperty(layerId, 'fill-opacity', 0.72);
+    } catch (_) {}
 
-    function clearHoveredRegion() {
-      if (hoveredRegionFeatureId !== null && map.getSource('olympic-areas')) {
-        map.setFeatureState(
-          { source: 'olympic-areas', id: hoveredRegionFeatureId },
-          { hover: false }
-        );
-      }
-      hoveredRegionFeatureId = null;
-    }
-
-    function handleRegionClick(region) {
-      if (!region) return;
-      hidePlacePreview();
-      scrollToRegion(region);
-    }
-
-    map.on('mousemove', 'olympic-areas-fill', (e) => {
+    map.on('mousemove', layerId, (e) => {
       map.getCanvas().style.cursor = 'pointer';
-      if (!e.features || !e.features.length) return;
-
-      const feature = e.features[0];
+      const feature = e.features && e.features[0];
       const region = inferRegionFromFeature(feature, e.lngLat);
       showRegionTooltip(region, e.point);
-
-      const featureId = feature.id;
-      if (featureId === undefined || featureId === null) return;
-
-      if (hoveredRegionFeatureId !== featureId) {
-        clearHoveredRegion();
-        hoveredRegionFeatureId = featureId;
-        map.setFeatureState(
-          { source: 'olympic-areas', id: hoveredRegionFeatureId },
-          { hover: true }
-        );
-      }
+      try {
+        map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+        map.setPaintProperty(layerId, 'fill-opacity', 0.95);
+      } catch (_) {}
     });
 
-    map.on('mouseleave', 'olympic-areas-fill', () => {
+    map.on('mouseleave', layerId, () => {
       map.getCanvas().style.cursor = '';
-      clearHoveredRegion();
       hideRegionTooltip();
+      try {
+        map.setPaintProperty(layerId, 'fill-color', '#0870ED');
+        map.setPaintProperty(layerId, 'fill-opacity', 0.72);
+      } catch (_) {}
     });
 
-    map.on('click', 'olympic-areas-fill', (e) => {
+    map.on('click', layerId, (e) => {
       if (!e.features || !e.features.length) return;
       const region = inferRegionFromFeature(e.features[0], e.lngLat);
       handleRegionClick(region);
     });
-
-    const studioRegionLayerIds = map.getStyle().layers
-      .filter(layer => {
-        if (layer.id === 'olympic-areas-fill' || layer.id === 'olympic-areas-line') return false;
-        if (layer.type !== 'fill') return false;
-        const sourceName = String(layer.source || '').toLowerCase();
-        return sourceName.includes('alessiavasiliu') || sourceName.includes('export') || sourceName.includes('olympic');
-      })
-      .map(layer => layer.id);
-
-    studioRegionLayerIds.forEach(layerId => {
-      try {
-        map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-        map.setPaintProperty(layerId, 'fill-opacity', 0.72);
-        map.moveLayer(layerId);
-      } catch (_) {}
-
-      map.on('mousemove', layerId, (e) => {
-        map.getCanvas().style.cursor = 'pointer';
-        const feature = e.features && e.features[0];
-        const region = inferRegionFromFeature(feature, e.lngLat);
-        showRegionTooltip(region, e.point);
-        try {
-          map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-          map.setPaintProperty(layerId, 'fill-opacity', 0.95);
-        } catch (_) {}
-      });
-
-      map.on('mouseleave', layerId, () => {
-        map.getCanvas().style.cursor = '';
-        hideRegionTooltip();
-        try {
-          map.setPaintProperty(layerId, 'fill-color', '#0870ED');
-          map.setPaintProperty(layerId, 'fill-opacity', 0.72);
-        } catch (_) {}
-      });
-
-      map.on('click', layerId, (e) => {
-        if (!e.features || !e.features.length) return;
-        const region = inferRegionFromFeature(e.features[0], e.lngLat);
-        handleRegionClick(region);
-      });
-    });
-  }
+  });
 
   locations.forEach(location => {
     const el = document.createElement('div');
